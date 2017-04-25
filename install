@@ -1,6 +1,7 @@
 #!/bin/bash
 
-cd "$(dirname "$0")"
+install_dir="$(dirname "$0")"
+cd $install_dir
 source config/defaults.cfg
 for user_config_file in user/config/*.cfg; do
   [ -f "$user_config_file" ] || continue
@@ -67,6 +68,8 @@ read -s -p "What is the root password for this Mac? (will also be used as the An
 echo "ansible_become_pass: \"$sudo_pass\"" >> ~/.macosa/user/vars/base.yml
 echo $sudo_pass > ~/.macosa/.vaultpass
 
+# Save the path to this install directory so we can auto-sync changes from the install location back to here
+echo "macosa_install_source: \"$install_dir\"" >> ~/.macosa/user/vars/base.yml
 
 printf "Running MacOSa script for local machine setup and provisioning...\n"
 ~/.macosa/bin/macosa -u -l $passthru
