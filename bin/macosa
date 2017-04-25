@@ -17,10 +17,9 @@ function usage () {
 Usage: `basename "$0"` [-h] [-u] [-l] [-x full|tools]
 
 Options:
-  -h                        Show this help
-  -u                        Run a MacOS software update before provisioning
-  -l                        Logout when finished
-  -x [Xcode install type]   If "full", will ensure full XCode installation, if "tools" just installs XCode cli tools (default is "tools")
+  -h    Show this help
+  -u    Run a MacOS software update before provisioning
+  -l    Logout when finished
 
 Other options:
   Anything you can pass to 'ansible-playbook' you can also pass to this script, for example:
@@ -78,18 +77,6 @@ fi
 if $update; then
   ./bin/macosa_softwareupdate
 fi
-
-# Install RVM
-# Mac's ruby version is notoriously behind, so let's ensure a little more control by default
-if ! command -v rvm >/dev/null; then
-  curl -sSL https://get.rvm.io | bash -s stable --ruby
-  echo "source $HOME/.rvm/scripts/rvm" >> ~/.bash_profile
-  source $HOME/.rvm/scripts/rvm
-  rvm use ruby --latest
-fi
-
-# make sure xcode and/or xcode tools are installed
-./bin/macosa_xcode $xcode
 
 # Install Homebrew
 if ! command -v brew >/dev/null; then

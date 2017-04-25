@@ -51,6 +51,15 @@ sudo systemsetup -setdisplaysleep Never
 # Let's run a system software update first before installing
 ./bin/macosa_softwareupdate
 
+# Install RVM
+# Mac's ruby version is notoriously behind, so let's ensure a little more control of ruby with rvm from the get-go
+curl -sSL https://get.rvm.io | bash -s stable --ruby
+source $HOME/.rvm/scripts/rvm
+rvm use ruby --latest --default
+
+# make sure xcode and/or xcode tools are installed
+./bin/macosa_xcode $xcode
+
 printf "Installing MacOSa to your machine...\n"
 # Install this repo to ~/.macosa
 rsync -a --delete-before --progress . ~/.macosa

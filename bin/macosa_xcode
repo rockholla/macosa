@@ -45,7 +45,6 @@ if ! xcode-select --print-path &> /dev/null; then
             (
               if ! command -v adcdownload >/dev/null; then
                 source $HOME/.rvm/scripts/rvm
-                rvm use ruby --latest
                 gem install adcdownload
               fi
               backto=$(pwd)
