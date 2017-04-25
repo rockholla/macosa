@@ -9,7 +9,7 @@
     mode: "u=rwx,g=rx,o=rx"
   with_items:
     - "#!/bin/bash"
-    - "export PATH=/usr/local/bin:/usr/local/sbin:~/.macosa/bin:$PATH"
+    - "export PATH=/usr/local/bin:/usr/local/sbin:~/.macosa/bin:~/.macosa/user/bin:$PATH"
     - "[[ -s ~/.bash_aliases ]] && source ~/.bash_aliases"
     - "[[ -s ~/.bashrc ]] && source ~/.bashrc"
     - "[[ -s ~/.profile ]] && source ~/.profile"
@@ -20,7 +20,7 @@
     src: "{{ item }}"
     dest: "~/"
     mode: "u=rwx,g=rx,o=rx"
-  when: "(item != '.keep') and (item != '.bash_profile')"
+  when: "(item.split('/')[-1] != '.keep') and (item.split('/')[-1] != '.bash_profile')"
   with_fileglob:
     - "{{ playbook_dir }}/user/files/dotfiles/.*"
   tags: [ dotfiles ]
