@@ -23,9 +23,8 @@ if [ $xcode_version == '8.3.2' ]; then
 fi
 
 printf "Checking to see if Xcode or Xcode tools are installed...\n"
-if ! xcode-select --print-path &> /dev/null; then
-
-  if [ $install_type == 'tools' ]; then
+if [ $install_type == 'tools' ]; then
+  if ! xcode-select --print-path &> /dev/null; then
     # Prompt user to install the XCode Command Line Tools
     xcode-select --install &> /dev/null
 
@@ -36,6 +35,9 @@ if ! xcode-select --print-path &> /dev/null; then
 
     printf "Xcode tools are finished installing.\n"
   else
+    printf "Xcode tools are already installed\n"
+  fi
+elif [ $install_type == 'full' ]; then
     # Mount and install
     if [ ! -d /Applications/Xcode.app ]; then
       if [ ! -f $root/.downloads/$file_basename.$download_file_type ]; then
@@ -73,8 +75,10 @@ if ! xcode-select --print-path &> /dev/null; then
       sudo hdiutil unmount "/Volumes/Xcode"
     fi
     printf "Xcode is finished installing.\n"
+  else
+    printf "Xcode application is already installed\n"
   fi
 
 else
-  printf "Xcode and/or Xcode tools are installed.\n"
+  printf "\033[33mWARNING: Invalid install type $install_type...ignorning\033[0m\n"
 fi

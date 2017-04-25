@@ -48,20 +48,12 @@ while [[ $# -gt 0 ]]; do
       logout=true
       shift
       ;;
-    -x)
-      xcode="$2"
-      shift 2
-      ;;
     *)
       passthru="$passthru $1"
       shift
       ;;
   esac
 done
-
-if [ $xcode != 'full' ] && [ $xcode != 'tools' ]; then
-  usage
-fi
 
 # Ask for sudo password and keep alive until this script finishes
 sudo -v
