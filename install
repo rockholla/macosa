@@ -84,4 +84,4 @@ echo $sudo_pass > ~/.macosa/.vaultpass
 echo "macosa_install_source: \"$install_dir\"" >> ~/.macosa/user/vars/base.yml
 
 printf "Running MacOSa script for local machine setup and provisioning...\n"
-~/.macosa/bin/macosa -u -l $passthru
+~/.macosa/bin/macosa -l $passthru
