@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Install Xcode or Xcode cli tools
-# Modified from https://github.com/alrra/dotfiles/blob/ff123ca9b9b/os/os_x/installs/install_xcode.sh
 
-root="$(dirname "$0")/.."
+this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+root="$this_dir/.."
 install_type="${1:-full}"
 download_file_type="xip"
 

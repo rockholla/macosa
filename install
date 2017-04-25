@@ -35,7 +35,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if pwd | grep $HOME &> /dev/null; then
+if pwd | grep $HOME &>/dev/null; then
   printf "\033[31mYou're trying to run the install from the installation destination, just run 'macosa' instead to provision\033[0m\n"
   exit 1
 fi
@@ -52,13 +52,9 @@ sudo systemsetup -setdisplaysleep Never
 ./bin/macosa_softwareupdate
 
 # We need at least xcode tools installed before installing rvm
-./bin/macosa_xcode tools
+./bin/macosa_xcode tools 1>/dev/null
 
-# Install RVM
-# Mac's ruby version is notoriously behind, so let's ensure a little more control of ruby with rvm from the get-go
-curl -sSL https://get.rvm.io | bash -s stable --ruby
-source $HOME/.rvm/scripts/rvm
-rvm use ruby --latest --default
+./bin/macosa_ruby
 
 # make sure xcode and/or xcode tools are installed
 ./bin/macosa_xcode $xcode
