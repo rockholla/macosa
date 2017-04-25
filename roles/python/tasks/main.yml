@@ -1,0 +1,19 @@
+---
+
+- name: Install pyenv
+  homebrew:
+    name: pyenv
+    state: present
+  when: pyenv_install
+
+- name: Ensure pyenv .bash_profile line is present
+  lineinfile:
+    dest: ~/.bash_profile
+    insertbefore: '^.*\.rvm/scripts/rvm.*'
+    line: 'eval "$(pyenv init -)"'
+
+- name: Install Python Packages
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ python_packages }}"

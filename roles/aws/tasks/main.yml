@@ -1,0 +1,63 @@
+---
+
+- name: Ensure aws cli is installed
+  homebrew:
+    name: awscli
+    state: present
+  when: "aws_cli_install"
+
+- name: Ensure ~/.aws directory exists
+  file:
+    path: ~/.aws
+    state: directory
+    mode: 0700
+
+- name: Set aws cli config
+  ini_file:
+    dest: "~/.aws/config"
+    create: yes
+    mode: 0600
+    section: "{{ 'profile %s' % item.0.name if (item.0.name != 'default') else item.0.name }}"
+    option: "{{ item.1.name }}"
+    value: "{{ item.1.value }}"
+    state: "{{ 'present' if aws_cli_profiles_active else 'absent' }}"
+  when: aws_cli_profiles_active
+  with_subelements:
+    - "{{ aws_cli_profiles }}"
+    - "config"
+
+- name: Set aws cli credentials
+  ini_file:
+    dest: "~/.aws/credentials"
+    create: yes
+    mode: 0600
+    section: "{{ item.0.name }}"
+    option: "{{ item.1.name }}"
+    value: "{{ item.1.value }}"
+    state: "{{ 'present' if aws_cli_profiles_active else 'absent' }}"
+  when: aws_cli_profiles_active
+  with_subelements:
+    - "{{ aws_cli_profiles }}"
+    - "credentials"
+
+- name: Remove aws cli config if set to inactive
+  ini_file:
+    dest: "~/.aws/config"
+    create: yes
+    mode: 0600
+    section: "{{ 'profile %s' % item.name if (item.name != 'default') else item.0.name }}"
+    state: absent
+  when: not aws_cli_profiles_active
+  with_items:
+    - "{{ aws_cli_profiles }}"
+
+- name: Remove aws cli credentials if set to inactive
+  ini_file:
+    dest: "~/.aws/credentials"
+    create: yes
+    mode: 0600
+    section: "{{ item.name }}"
+    state: absent
+  when: not aws_cli_profiles_active
+  with_items:
+    - "{{ aws_cli_profiles }}"

@@ -1,0 +1,149 @@
+#!/bin/bash
+
+cd "$(dirname "$0")/../"
+source config/defaults.cfg
+for user_config_file in $(pwd)/user/config/*.cfg; do
+  [ -f "$user_config_file" ] || continue
+  source "$user_config_file"
+done
+
+update=false
+logout=false
+xcode="tools"
+passthru=""
+
+function usage () {
+   cat <<EOF
+Usage: `basename "$0"` [-h] [-u] [-l] [-x full|tools]
+
+Options:
+  -h                        Show this help
+  -u                        Run a MacOS software update before provisioning
+  -l                        Logout when finished
+  -x [Xcode install type]   If "full", will ensure full XCode installation, if "tools" just installs XCode cli tools (default is "tools")
+
+Other options:
+  Anything you can pass to 'ansible-playbook' you can also pass to this script, for example:
+
+    `basename "$0"` --tags=homebrew,client1
+
+Ansible Playbook Help:
+`ansible-playbook --help`
+
+EOF
+  exit 0
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h)
+      usage
+      shift
+      ;;
+    -u)
+      update=true
+      shift
+      ;;
+    -l)
+      logout=true
+      shift
+      ;;
+    -x)
+      xcode="$2"
+      shift 2
+      ;;
+    *)
+      passthru="$passthru $1"
+      shift
+      ;;
+  esac
+done
+
+if [ $xcode != 'full' ] && [ $xcode != 'tools' ]; then
+  usage
+fi
+
+# Ask for sudo password and keep alive until this script finishes
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
+if [ -f user/reminders/before ]; then
+  printf "There are some reminders for you before this run:\n"
+  printf "\033[33m\n"
+  cat user/reminders/before
+  printf "\033[0m\n"
+  read -rsp $'Press any key to continue...\n' -n1 key
+fi
+
+if $update; then
+  ./bin/macosa_softwareupdate
+fi
+
+# Install RVM
+# Mac's ruby version is notoriously behind, so let's ensure a little more control by default
+if ! command -v rvm >/dev/null; then
+  curl -sSL https://get.rvm.io | bash -s stable --ruby
+  echo "source $HOME/.rvm/scripts/rvm" >> ~/.bash_profile
+  source $HOME/.rvm/scripts/rvm
+  rvm use ruby --latest
+fi
+
+# make sure xcode and/or xcode tools are installed
+./bin/macosa_xcode $xcode
+
+# Install Homebrew
+if ! command -v brew >/dev/null; then
+  printf "Installing Homebrew...\n"
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" </dev/null
+else
+  printf "Homebrew is installed.\n"
+fi
+
+# Install Python
+if [ ! -f /usr/local/bin/python ]; then
+  printf "Installing Python via Homebrew...\n"
+  brew install python
+else
+  printf "Python is installed via Homebrew.\n"
+fi
+
+# Install python package biplist
+if ! python -c "import biplist" &>/dev/null; then
+  printf "Installing biplist...\n"
+  pip install biplist
+else
+  printf "biplist is installed.\n"
+fi
+
+# Install Ansible
+if ! command -v ansible >/dev/null; then
+  printf "Installing Ansible...\n"
+  pip install ansible
+else
+  printf "Ansible is installed.\n"
+fi
+
+####################################
+# Ansible Provisioning             #
+####################################
+
+cd ~/.macosa
+
+# Install ansible requirements
+if [ -f requirements.yml ]; then
+  printf "Installing Ansible requirements...\n"
+  ansible-galaxy install -r requirements.yml
+fi
+
+# Run the playbook
+printf "Running main playbook against local connection...\n"
+ansible-playbook -e "ansible_python_interpreter=/usr/local/bin/python" -i inventory/all $passthru macos.yml
+
+if [ -f user/reminders/after ]; then
+  printf "There are some reminders for you after this run:\n"
+  printf "\033[33m\n"
+  cat user/reminders/after
+  printf "\033[0m\n"
+fi
+
+~/.bash_profile

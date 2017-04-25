@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ "$1" == "create" ]; then
+    if ! docker-machine ls | grep "docker-aws" &> /dev/null; then
+        docker-machine create --driver amazonec2 --amazonec2-region us-west-2 --amazonec2-instance-type t2.medium docker-aws
+    else
+        echo -e "docker-aws already created"
+    fi
+fi
+if [ "$1" == "rm" ]; then
+    docker-machine rm docker-aws
+fi

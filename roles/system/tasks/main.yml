@@ -1,0 +1,50 @@
+---
+
+- name: Check the computer name
+  command: systemsetup -getcomputername
+  become: yes
+  become_method: sudo
+  changed_when: false
+  register: current_computer_name
+
+- name: Set the computer name
+  command: "systemsetup -setcomputername {{ computer_name }}"
+  become: yes
+  become_method: sudo
+  when: "'{{ computer_name }}' not in '{{ current_computer_name.stdout }}'"
+
+- name: Check current power management settings
+  shell: "pmset -a -g | grep -E \"^(\\s){{ item.key }}(\\s+)([0-9]+)(.*?)$\" | grep -oE \"[0-9]+\""
+  register: "current_power_management"
+  with_dict: "{{ power_management }}"
+  changed_when: false
+
+- name: Configure power management settings
+  shell: "pmset -a {{ item.item.key }} {{ item.item.value }}"
+  when: "{{ item.item.value }} != {{ item.stdout }}"
+  become: yes
+  become_method: sudo
+  with_items: "{{ current_power_management.results }}"
+
+- name: Ensure configured /etc/hosts entries exist
+  lineinfile:
+    dest: /etc/hosts
+    regexp: ".*{{ item.host_name }}$"
+    line: "{{ item.ip }} {{ item.host_name }}"
+    state: present
+  become: yes
+  become_method: sudo
+  with_items: "{{ etc_hosts }}"
+
+- name: Set system and application defaults
+  plist:
+    dest: "{{ item.domain }}"
+    values: "{{ item['values'] }}"
+    container: "{{ item.container | default(None) }}"
+  with_items: "{{ system_defaults }}"
+  notify:
+    - logout
+
+- { include: dock.yml, tags: [ dock ] }
+- { include: trackpad.yml, tags: [ trackpad ] }
+- { include: menubar.yml, tags: [ menubar ] }

@@ -1,0 +1,6 @@
+---
+
+rvm_install: yes
+ruby_versions:
+  - stable
+ruby_default_version: stable

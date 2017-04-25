@@ -1,0 +1,29 @@
+---
+
+computer_name: "MacOSa Managed"
+etc_hosts: []
+system_defaults: []
+
+power_management:
+  sleep: 60
+  displaysleep: 20
+  disksleep: 120
+
+trackpad:
+  single_click: false
+  secondary_click: "two-fingers" # one of: false, "two-fingers", "bottom-right", or "bottom-left"
+
+menubar: []
+
+dock:
+  applications:
+    - "/Applications/App Store.app"
+    - "/Applications/Launchpad.app"
+    - "/Applications/Messages.app"
+    - "/Applications/Xcode.app"
+    - "/Applications/iTunes.app"
+    - "/Applications/System Preferences.app"
+  files:
+    - path: "/Users/{{ ansible_user_id }}/Downloads"
+      arrangement: 1
+      showas: 0

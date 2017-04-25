@@ -1,0 +1,57 @@
+---
+- hosts: macos
+  connection: local
+  become: no
+
+  vars_files:
+    - vars/defaults.yml
+
+  pre_tasks:
+
+    - name: Include user-supplied variables
+      include_vars:
+        dir: user/vars
+        ignore_files: [ ".keep", ".example" ]
+      tags: [ always ]
+
+    - name: Get a list of all user-supplied pre tasks to include
+      find:
+        paths: "{{ playbook_dir }}/user/tasks/pre"
+        patterns: "*.yml"
+      register: user_pre_tasks
+      changed_when: false
+      tags: [ always ]
+
+    - name: Include user-supplied pre tasks
+      include: "{{ item.path }}"
+      with_items: "{{ user_pre_tasks.files }}"
+
+  roles:
+
+    - { role: homebrew, when: "'homebrew' in roles", tags: [ homebrew ] }
+    - { role: python, when: "'python' in roles", tags: [ python ] }
+    - { role: node, when: "'node' in roles", tags: [ node ] }
+    - { role: ruby, when: "'ruby' in roles", tags: [ ruby ] }
+    - { role: browsers, when: "'browsers' in roles", tags: [ browsers ] }
+    - { role: aws, when: "'aws' in roles", tags: [ aws ] }
+    - { role: projects, when: "'projects' in roles", tags: [ projects ] }
+    - { role: user, when: "'user' in roles", tags: [ user ] }
+    - { role: system, when: "'system' in roles", tags: [ system ] }
+
+  tasks:
+
+    - name: Get a list of all user-supplied post tasks to include
+      find:
+        paths: "{{ playbook_dir }}/user/tasks/post"
+        patterns: "*.yml"
+      register: user_post_tasks
+      changed_when: false
+      tags: [ always ]
+
+    - name: Include user-supplied post tasks
+      include: "{{ item.path }}"
+      with_items: "{{ user_post_tasks.files }}"
+
+  # handlers:
+  #   - name: restart launch services
+  #     shell: "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -all local,system,user"

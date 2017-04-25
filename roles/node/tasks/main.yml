@@ -1,0 +1,58 @@
+---
+
+- name: Check to see if nvm is installed
+  stat:
+    path: "~/.nvm/nvm.sh"
+  register: nvm_path
+  changed_when: false
+
+- name: Ensure nvm initialization line is present in .bash_profile
+  lineinfile:
+    dest: ~/.bash_profile
+    insertbefore: '^.*\.rvm/scripts/rvm.*'
+    line: 'export NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
+
+- name: Install nvm
+  shell: >
+    \curl -sSL https://raw.githubusercontent.com/creationix/nvm/{{ nvm_version }}/install.sh | bash -s
+  when: "nvm_install and (not nvm_path.stat.exists)"
+
+- name: Make sure at least the most recent stable version of node is installed using nvm
+  shell: >
+    source ~/.nvm/nvm.sh; nvm install stable
+  when: "nvm_install and (not nvm_path.stat.exists)"
+
+- name: Get the stable version
+  shell: >
+    source ~/.nvm/nvm.sh; nvm ls stable | tr -d '[:cntrl:]'
+  register: nvm_stable_version
+  changed_when: false
+
+- set_fact:
+    nvm_stable_version_stripped: "{{ nvm_stable_version.stdout | regex_replace('^(\\[0;[0-9]+m)?.*\\s+', '') | regex_replace('\\[0m', '') }}"
+
+- name: Compare installed versions of node against ones we want installed
+  shell: >
+    source ~/.nvm/nvm.sh; nvm ls | grep -E "(\->)?\s+(v)?{{ (nvm_stable_version_stripped if item == 'stable' else item) }}" | cat
+  register: nvm_node_versions_check
+  with_items: "{{ node_versions }}"
+  changed_when: false
+
+- name: Install node versions
+  shell: >
+    source ~/.nvm/nvm.sh; nvm install {{ item.item }}
+  register: nvm_node_install
+  with_items: "{{ nvm_node_versions_check.results }}"
+  when: "{{ item.stdout == '' }}"
+
+- name: Get current node version being used
+  shell: >
+    source ~/.nvm/nvm.sh; nvm current
+  changed_when: false
+  register: nvm_current_node_version
+
+# TODO: nvm use <version> does not work in updating the current session running this provisioning, so we're just leaving it out, accepting that the next terminal session opened will use the new default
+- name: Set default node version
+  shell: >
+    source ~/.nvm/nvm.sh; nvm alias default {{ node_default_version }}
+  when: "{{ (node_default_version != None) and (nvm_current_node_version.stdout != (nvm_stable_version_stripped if node_default_version == 'stable' else (node_default_version | regex_replace('^([0-9].*)', 'v\\1')))) }}"

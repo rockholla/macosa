@@ -1,0 +1,29 @@
+---
+
+- name: Ensure configured taps are tapped.
+  homebrew_tap: "tap={{ item }} state=present"
+  with_items: "{{ homebrew_taps }}"
+
+- name: Update homebrew (if configured)
+  homebrew: update_homebrew=yes
+  when: homebrew_upgrade or homebrew_update
+
+- name: Ensure configured homebrew packages are installed.
+  homebrew: "name={{ item }} state=present"
+  with_items: "{{ homebrew_packages }}"
+
+- name: Upgrade all homebrew packages (if configured).
+  homebrew: upgrade_all=yes
+  when: homebrew_upgrade
+
+- name: Get list of apps installed with cask.
+  command: >
+    brew cask list
+  register: cask_installed_apps
+  changed_when: false
+
+- name: Install configured cask applications.
+  command: >
+    brew cask install {{ item }} --appdir={{ homebrew_cask_appdir }}
+  with_items: "{{ homebrew_cask_apps }}"
+  when: "'{{ item }}' not in cask_installed_apps.stdout"

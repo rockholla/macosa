@@ -1,0 +1,8 @@
+---
+
+homebrew_update: yes
+homebrew_upgrade: no
+homebrew_cask_appdir: "/Applications"
+homebrew_taps: []
+homebrew_packages: []
+homebrew_cask_apps: []

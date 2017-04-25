@@ -1,0 +1,19 @@
+#!/bin/bash
+
+restart_required=false
+
+# OSX system updates, installs all updates available
+printf "Running system software update...\n"
+
+# Check if there are any updates that require a restart
+if sudo softwareupdate -lva | grep "restart"; then
+  printf "A restart will be required after the update is complete.\n"
+  restart_required=true
+fi
+
+sudo softwareupdate -iva --no-scan
+  
+if $restart_required; then
+  read -rsp $'Press any key to restart...\n' -n1 key
+  sudo shutdown -r now "Restarting now to complete software update..."
+fi

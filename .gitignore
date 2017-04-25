@@ -1,0 +1,8 @@
+*.DS_Store
+*.retry
+.downloads/*
+!.downloads/.keep
+.logout
+vars/.local.yml
+.vaultpass
+.docker-local.initialized

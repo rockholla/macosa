@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# TODO: this sucks as does the way in which these things have to be set at all, maybe something better to do here
+single_click=false
+single_click_int=0
+TrackpadCornerSecondaryClick=0
+TrackpadRightClick=false
+trackpadCornerClickBehavior=0
+enableSecondaryClick=false
+if $1; then
+  single_click=true
+  single_click_int=1
+fi
+if ! [ $2 == false ]; then
+  if [ "$2" == "two-fingers" ]; then
+    TrackpadRightClick=true
+    enableSecondaryClick=true
+  elif [ "$2" == "bottom-right" ]; then
+    TrackpadCornerSecondaryClick=2
+    trackpadCornerClickBehavior=1
+  elif [ "$2" == "bottom-left" ]; then
+    TrackpadCornerSecondaryClick=1
+    trackpadCornerClickBehavior=3
+  fi
+fi
+
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool $single_click
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int $single_click_int
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int $single_click_int
+
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int $TrackpadCornerSecondaryClick
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool $TrackpadRightClick
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int $trackpadCornerClickBehavior
+defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool $enableSecondaryClick

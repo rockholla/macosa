@@ -1,0 +1,5 @@
+#!/bin/bash
+
+dscl . delete ~/ jpegphoto
+dscl . delete ~/ Picture
+sudo dscl . create ~/ Picture "$1"

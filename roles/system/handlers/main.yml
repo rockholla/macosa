@@ -1,0 +1,14 @@
+---
+
+- name: restart dock
+  command: >
+    killall -HUP Dock
+
+- name: restart systemuiserver
+  command: >
+    killall -HUP SystemUIServer
+
+- name: logout
+  become: yes
+  command: >
+    {{ playbook_dir }}/bin/macosa_logout force

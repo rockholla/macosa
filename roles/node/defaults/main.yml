@@ -1,0 +1,7 @@
+---
+
+nvm_install: no
+nvm_version: "v0.33.1"
+node_versions:
+  - stable
+node_default_version: stable

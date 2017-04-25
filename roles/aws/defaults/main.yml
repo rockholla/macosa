@@ -1,0 +1,5 @@
+---
+
+aws_cli_install: yes
+aws_cli_profiles: []
+aws_cli_profiles_active: yes

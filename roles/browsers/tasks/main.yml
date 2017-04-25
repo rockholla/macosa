@@ -1,0 +1,10 @@
+---
+
+- name: Get current default browser
+  shell: "{{ playbook_dir }}/bin/defaultbrowser"
+  register: "current_default_browser"
+  changed_when: false
+
+- name: Set default browser
+  shell: "{{ playbook_dir }}/bin/defaultbrowser -set {{ default_browser }}"
+  when: "'Current: {{ default_browser }}' not in '{{ current_default_browser.stdout }}'"

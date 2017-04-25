@@ -1,0 +1,56 @@
+---
+
+- name: Make sure .bash_profile is setup
+  lineinfile:
+    dest: ~/.bash_profile
+    create: yes
+    line: "{{ item }}"
+    insertbefore: "{{ 'BOF' if item == '#!/bin/bash' else None }}"
+    mode: "u=rwx,g=rx,o=rx"
+  with_items:
+    - "#!/bin/bash"
+    - "export PATH=/usr/local/bin:/usr/local/sbin:~/.macosa/bin:$PATH"
+    - "[[ -s ~/.bash_aliases ]] && source ~/.bash_aliases"
+    - "[[ -s ~/.bashrc ]] && source ~/.bashrc"
+    - "[[ -s ~/.profile ]] && source ~/.profile"
+  tags: [ dotfiles ]
+
+- name: Copy dotfiles to ~/
+  copy:
+    src: "{{ item }}"
+    dest: "~/"
+    mode: "u=rwx,g=rx,o=rx"
+  when: "(item != '.keep') and (item != '.bash_profile')"
+  with_fileglob:
+    - "{{ playbook_dir }}/user/files/dotfiles/.*"
+  tags: [ dotfiles ]
+
+- name: Get current account avatar
+  command: >
+    dscl . read ~/ Picture
+  register: "current_account_avatar"
+  when: "account.avatar_path != None"
+  changed_when: false
+  tags: [ avatar ]
+
+- name: Set account avatar
+  command: >
+    {{ playbook_dir }}/bin/macosa_setaccountavatar {{ account.avatar_path }}
+  when: "(account.avatar_path != None) and ('{{ account.avatar_path }}' not in '{{ current_account_avatar.stdout }}')"
+  tags: [ avatar ]
+
+- name: Ensure .ssh directory exists.
+  file:
+    dest: "~/.ssh"
+    mode: 0700
+    state: directory
+  tags: [ ssh ]
+
+- name: Copy ssh files to ~/.ssh
+  copy:
+    src: "{{ item }}"
+    dest: "~/.ssh/"
+  when: "item != '.keep'"
+  with_fileglob:
+    - "{{ playbook_dir }}/user/files/.ssh/*"
+  tags: [ ssh ]

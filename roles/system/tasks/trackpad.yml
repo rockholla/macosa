@@ -1,0 +1,6 @@
+---
+
+- name: Set trackpad click and secondary click preferences
+  shell: "{{ playbook_dir }}/bin/macosa_settrackpadprefs {{ trackpad.single_click }} {{ trackpad.secondary_click }}"
+  # TODO: Maybe check to see if this really changed or not
+  changed_when: false

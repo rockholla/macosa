@@ -1,0 +1,81 @@
+#!/bin/bash
+
+# Install Xcode or Xcode cli tools
+# Modified from https://github.com/alrra/dotfiles/blob/ff123ca9b9b/os/os_x/installs/install_xcode.sh
+
+root="$(dirname "$0")/.."
+install_type="${1:-full}"
+download_file_type="xip"
+
+if [ -z $xcode_version ]; then
+  printf "\033[31m'xcode_version' environment or local variable is not set and needs to be for running this script\033[0m\n"
+  exit 1
+fi
+
+file_basename="Xcode_$xcode_version"
+version_parts=(${xcode_version//./ })
+major_version="${version_parts[0]}"
+if [[ $major_version < "8" ]]; then
+  download_file_type="dmg"
+fi
+if [ $xcode_version == '8.3.2' ]; then
+  file_basename="Xcode$xcode_version"
+fi
+
+printf "Checking to see if Xcode or Xcode tools are installed...\n"
+if ! xcode-select --print-path &> /dev/null; then
+
+  if [ $install_type == 'tools' ]; then
+    # Prompt user to install the XCode Command Line Tools
+    xcode-select --install &> /dev/null
+
+    # Wait until the XCode Command Line Tools are installed
+    until xcode-select --print-path &> /dev/null; do
+      sleep 5
+    done
+
+    printf "Xcode tools are finished installing.\n"
+  else
+    # Mount and install
+    if [ ! -d /Applications/Xcode.app ]; then
+      if [ ! -f $root/.downloads/$file_basename.$download_file_type ]; then
+        read -rp $'We can try to download Xcode for you automatically, but you need to make sure you don\'t have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download it automatically? [Y/n] ' response
+        case "$response" in
+          [yY][eE][sS]|[yY])
+            (
+              if ! command -v adcdownload >/dev/null; then
+                source $HOME/.rvm/scripts/rvm
+                rvm use ruby --latest
+                gem install adcdownload
+              fi
+              backto=$(pwd)
+              cd $root/.downloads/
+              printf "You may be asked to enter your Apple account credentials:\n"
+              adcdownload get http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type
+              cd $backto
+            )
+            ;;
+          *)
+            read -rsp $'Please download Xcode from http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type.  Move the downloaded file to ~/.macosa/.downloads/, then press any key continue.\n' -n1 key
+            ;;
+        esac
+
+      fi
+      printf "Mouting and copying Xcode to Applications...\n"
+      sudo hdiutil attach $root/.downloads/$file_basename.$download_file_type
+      sudo cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
+    fi
+
+    printf "You must agree to the Xcode license in order to complete the installation...\n"
+    sudo xcrun cc
+
+    # Unmount the installation image
+    if mount | grep "on /Volumes/Xcode" > /dev/null; then
+      sudo hdiutil unmount "/Volumes/Xcode"
+    fi
+    printf "Xcode is finished installing.\n"
+  fi
+
+else
+  printf "Xcode and/or Xcode tools are installed.\n"
+fi

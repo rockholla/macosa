@@ -1,0 +1,12 @@
+---
+
+roles:
+  - homebrew
+  - python
+  - ruby
+  - node
+  - browsers
+  - aws
+  - projects
+  - user
+  - system

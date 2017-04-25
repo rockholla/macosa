@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ "$1" != "force" ];
+  read -rsp $'Press any key to continue by logging out...\n' -n1 key
+else
+  echo "Waiting 10 seconds before logging out..."
+  sleep 10
+fi
+launchctl bootout gui/$(id -u)

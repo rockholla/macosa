@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# TODO: there should be a way to pass this boolean to the osascript, or maybe what this script is doing should be elsewhere
+if $3; then
+  osascript -e "tell application \"System Events\" to make login item at end with properties {name: \"$1\", path: \"$2\", hidden: true}"
+else
+  osascript -e "tell application \"System Events\" to make login item at end with properties {name: \"$1\", path: \"$2\", hidden: false}"
+fi

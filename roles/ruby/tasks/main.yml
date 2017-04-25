@@ -1,0 +1,57 @@
+---
+
+- name: Check to see if rvm is installed
+  stat:
+    path: "~/.rvm"
+  register: rvm_path
+  changed_when: false
+
+- name: Install rvm
+  shell: >
+    \curl -sSL https://get.rvm.io | bash -s stable --ruby
+  when: "rvm_install and ((rvm_path.stat.isdir is not defined) or (not rvm_path.stat.isdir))"
+
+- name: Ensure rvm initialization lines are present in .bash_profile
+  lineinfile:
+    dest: ~/.bash_profile
+    insertafter: EOF
+    line: "{{ item }}"
+  with_items:
+    - '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"'
+    - 'export PATH="$PATH:$HOME/.rvm/bin"'
+
+- name: Get list of standard known rubies
+  shell: >
+    source "$HOME/.rvm/scripts/rvm"; rvm ls known strings | grep -E "^ruby-[0-9]"
+  register: rvm_known_rubies
+  changed_when: false
+
+- name: Get list of installed rubies
+  shell: >
+    source "$HOME/.rvm/scripts/rvm"; rvm ls rubies strings
+  register: rvm_installed_rubies
+  changed_when: false
+
+- name: Get current default ruby version
+  shell: >
+    source "$HOME/.rvm/scripts/rvm"; rvm current
+  register: rvm_current_default_ruby
+  changed_when: false
+
+- set_fact:
+    stable_ruby_version: "{{ rvm_known_rubies.stdout_lines[0] }}"
+
+- name: Install ruby versions
+  shell: >
+    source "$HOME/.rvm/scripts/rvm"; rvm install {{ stable_ruby_version if item == 'stable' else (item | regex_replace('^([0-9].*)', 'ruby-\1')) }}
+  register: rvm_ruby_install
+  with_items: "{{ ruby_versions }}"
+  when: "('{{ stable_ruby_version if item == 'stable' else (item | regex_replace('^([0-9].*)', 'ruby-\\1')) }}' not in rvm_installed_rubies.stdout_lines)"
+
+- set_fact:
+    use_ruby_version: "{{ stable_ruby_version if ruby_default_version == 'stable' else (ruby_default_version | regex_replace('^([0-9].*)', 'ruby-\\1')) }}"
+
+- name: Set default rvm ruby
+  shell: >
+    source "$HOME/.rvm/scripts/rvm"; rvm --default use {{ use_ruby_version }}
+  when: "(use_ruby_version != None) and (use_ruby_version != rvm_current_default_ruby.stdout)"

@@ -1,0 +1,64 @@
+---
+
+- name: Get current dock item count
+  shell: >
+    /usr/libexec/PListBuddy -c "Print {{ item }}" ~/Library/Preferences/com.apple.dock.plist | grep -a -E '^\s+Dict' | wc -l
+  register: current_dock_count
+  changed_when: false
+  with_items:
+    - "persistent-apps"
+    - "persistent-others"
+
+- name: Check to see if current state of dock application/files count is up-to-date
+  command: echo true
+  changed_when: "{{ item.stdout | regex_replace('\\s', '') | int }} != {{ dock[('applications' if item.item == 'persistent-apps' else 'files')] | length }}"
+  register: current_dock_count_check
+  with_items: "{{ current_dock_count.results }}"
+
+- name: Check to see if current state of dock applications is up-to-date
+  shell: >
+    if [[ `/usr/libexec/PListBuddy -c "Print persistent-apps:{{ item.0 }}:tile-data:file-data:_CFURLString" ~/Library/Preferences/com.apple.dock.plist | python -c "import urllib; import sys; print urllib.unquote(sys.stdin.readline());"` != *"{{ item.1 }}"* ]]; then
+      echo "Dock Configuration Changed"
+    fi
+  register: dock_applications_check
+  when: "not {{ current_dock_count_check.changed }}"
+  changed_when: "'Dock Configuration Changed' in dock_applications_check.stdout"
+  with_indexed_items: "{{ dock.applications }}"
+
+- name: Check to see if current state of dock files is up-to-date
+  shell: >
+    if [[ `/usr/libexec/PListBuddy -c "Print persistent-others:{{ item.0 }}:tile-data:file-data:_CFURLString" ~/Library/Preferences/com.apple.dock.plist | python -c "import urllib; import sys; print urllib.unquote(sys.stdin.readline());"` != *"{{ item.1.path }}"* ]]; then
+      echo "Dock Configuration Changed"
+    elif [[ `/usr/libexec/PListBuddy -c "Print persistent-others:{{ item.0 }}:tile-data:showas" ~/Library/Preferences/com.apple.dock.plist` != "{{ item.1.showas | default(0) }}" ]]; then
+      echo "Dock Configuration Changed"
+    elif [[ `/usr/libexec/PListBuddy -c "Print persistent-others:{{ item.0 }}:tile-data:arrangement" ~/Library/Preferences/com.apple.dock.plist` != "{{ item.1.arrangement | default(1) }}" ]]; then
+      echo "Dock Configuration Changed"
+    fi
+  register: dock_files_check
+  when: "not {{ current_dock_count_check.changed }}"
+  changed_when: "'Dock Configuration Changed' in dock_files_check.stdout"
+  with_indexed_items: "{{ dock.files }}"
+
+- name: Remove all dock applications/files
+  command: >
+    /usr/libexec/PlistBuddy -c "Delete {{ item }}" ~/Library/Preferences/com.apple.dock.plist
+  when: "{{ current_dock_count_check.changed }} or {{ dock_applications_check.changed }} or {{ dock_files_check.changed }}"
+  with_items:
+    - "persistent-apps"
+    - "persistent-others"
+
+- name: Set dock applications
+  command: >
+    defaults write com.apple.dock persistent-apps -array-add "<dict><key>tile-data</key><dict><key>file-data</key><dict><key>_CFURLString</key><string>{{ item }}</string><key>_CFURLStringType</key><integer>0</integer></dict></dict></dict>"
+  when: "{{ current_dock_count_check.changed }} or {{ dock_applications_check.changed }} or {{ dock_files_check.changed }}"
+  with_items: "{{ dock['applications'] }}"
+  notify:
+    - restart dock
+
+- name: Set dock files
+  command: >
+    defaults write com.apple.dock persistent-others -array-add "<dict><key>tile-data</key><dict><key>arrangement</key><integer>{{ item.arrangement | default(1) }}</integer><key>showas</key><integer>{{ item.showas | default(0) }}</integer><key>file-data</key><dict><key>_CFURLString</key><string>{{ item.path }}</string><key>_CFURLStringType</key><integer>0</integer></dict></dict><key>tile-type</key><string>directory-tile</string></dict>"
+  when: "{{ current_dock_count_check.changed }} or {{ dock_applications_check.changed }} or {{ dock_files_check.changed }}"
+  with_items: "{{ dock['files'] }}"
+  notify:
+    - restart dock
