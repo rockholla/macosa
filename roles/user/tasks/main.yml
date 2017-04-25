@@ -5,24 +5,24 @@
     dest: ~/.bash_profile
     create: yes
     line: "{{ item }}"
-    insertbefore: "{{ 'BOF' if item == '#!/bin/bash' else None }}"
-    mode: "u=rwx,g=rx,o=rx"
+    insertbefore: BOF
   with_items:
-    - "#!/bin/bash"
-    - "export PATH=/usr/local/bin:/usr/local/sbin:~/.macosa/bin:~/.macosa/user/bin:$PATH"
-    - "[[ -s ~/.bash_aliases ]] && source ~/.bash_aliases"
     - "[[ -s ~/.bashrc ]] && source ~/.bashrc"
     - "[[ -s ~/.profile ]] && source ~/.profile"
+    - "[[ -s ~/.bash_aliases ]] && source ~/.bash_aliases"
+    - "export PATH=/usr/local/bin:/usr/local/sbin:~/.macosa/bin:~/.macosa/user/bin:$PATH"
   tags: [ dotfiles ]
 
-- name: Copy dotfiles to ~/
-  copy:
-    src: "{{ item }}"
-    dest: "~/"
-    mode: "u=rwx,g=rx,o=rx"
-  when: "(item.split('/')[-1] != '.keep') and (item.split('/')[-1] != '.bash_profile')"
+- name: Copy dotfile blocks to ~/
+  blockinfile:
+    marker: "# {mark} MacOSa managed block"
+    dest: "~/{{ item.split('/')[-1] }}"
+    create: yes
+    block: "{{ lookup('file', item) }}"
+    insertbefore: BOF
+  when: "(item.split('/')[-1] != '.keep')"
   with_fileglob:
-    - "{{ playbook_dir }}/user/files/dotfiles/.*"
+    - "{{ playbook_dir }}/user/blocks/dotfiles/.*"
   tags: [ dotfiles ]
 
 - name: Get current account avatar

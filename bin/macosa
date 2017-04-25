@@ -1,7 +1,7 @@
 #!/bin/bash
 
-macosa_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$macosa_dir"
+macosa_bin_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$macosa_bin_dir/../"
 source config/defaults.cfg
 for user_config_file in $(pwd)/user/config/*.cfg; do
   [ -f "$user_config_file" ] || continue
@@ -126,5 +126,3 @@ if [ -f user/reminders/after ]; then
   cat user/reminders/after
   printf "\033[0m\n"
 fi
-
-~/.bash_profile

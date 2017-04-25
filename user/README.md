@@ -18,8 +18,11 @@ A place for your Ansible Jinja2 templates, you can reference this location in an
 
 A place for your Ansible files, you can reference this location in any variables like `user/files/yourfile.plist`.  Additionally, there are some more structured places for particular things in this directory:
 
-* `dotfiles`: any files beginning with a `.` (**except `.bash_profile`**) in this directory will be considered dotfiles (e.g. `.profile`) and placed in your home directory.  We are reserving `.bash_profile` for MacOSa, but our auto-generated version of this file will automatically include `~/.bashrc`, `~/.profile`, and `~/.bash_aliases` files if they're present.
 * `.ssh`: any files in this directory will be placed in your `~/.ssh` directory
+
+## `blocks`
+
+* `dotfiles`: Content in files here will be prepended to files in `~/` of the same name.  If the file doesn't already exist at `~/`, the file will be created with the content.
 
 ## `reminders`
 
