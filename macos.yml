@@ -60,8 +60,8 @@
 
     - name: Syncing MacOSa install back to install source (if available)
       synchronize:
-        src: "~/.macosa"
-        dest: "{{ macosa_install_source }}"
+        src: "~/.macosa/"
+        dest: "{{ macosa_install_source }}/"
         delete: yes
       when: "macosa_install_source_check.stat.exists"
       tags: [ always ]
