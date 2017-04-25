@@ -1,7 +1,7 @@
 #!/bin/bash
 
-install_dir="$(dirname "$0")"
-cd $install_dir
+install_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$install_dir"
 source config/defaults.cfg
 for user_config_file in user/config/*.cfg; do
   [ -f "$user_config_file" ] || continue
