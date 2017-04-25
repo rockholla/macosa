@@ -51,7 +51,3 @@
     - name: Include user-supplied post tasks
       include: "{{ item.path }}"
       with_items: "{{ user_post_tasks.files }}"
-
-  # handlers:
-  #   - name: restart launch services
-  #     shell: "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -kill -r -all local,system,user"

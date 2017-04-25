@@ -50,7 +50,7 @@
   copy:
     src: "{{ item }}"
     dest: "~/.ssh/"
-  when: "item != '.keep'"
+  when: "item.split('/')[-1] != '.keep'"
   with_fileglob:
     - "{{ playbook_dir }}/user/files/.ssh/*"
   tags: [ ssh ]
