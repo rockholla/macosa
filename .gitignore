@@ -1,8 +1,13 @@
+/user/**/*
+!/user/**/*/
+!README.md
+!.example
+!.keep
+
 *.DS_Store
 *.retry
 .downloads/*
 !.downloads/.keep
-.logout
-vars/.local.yml
 .vaultpass
-.docker-local.initialized
+
+.vagrant
