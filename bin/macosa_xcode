@@ -24,12 +24,13 @@ fi
 
 printf "Checking to see if Xcode or Xcode tools are installed...\n"
 if [ $install_type == 'tools' ]; then
-  if ! xcode-select --print-path &> /dev/null; then
+
+  if ! xcode-select --print-path &>/dev/null; then
     # Prompt user to install the XCode Command Line Tools
-    xcode-select --install &> /dev/null
+    xcode-select --install &>/dev/null
 
     # Wait until the XCode Command Line Tools are installed
-    until xcode-select --print-path &> /dev/null; do
+    until xcode-select --print-path &>/dev/null; do
       sleep 5
     done
 
@@ -37,41 +38,41 @@ if [ $install_type == 'tools' ]; then
   else
     printf "Xcode tools are already installed\n"
   fi
-elif [ $install_type == 'full' ]; then
-    # Mount and install
-    if [ ! -d /Applications/Xcode.app ]; then
-      if [ ! -f $root/.downloads/$file_basename.$download_file_type ]; then
-        read -rp $'We can try to download Xcode for you automatically, but you need to make sure you don\'t have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download it automatically? [Y/n] ' response
-        case "$response" in
-          [yY][eE][sS]|[yY])
-            (
-              if ! command -v adcdownload >/dev/null; then
-                source $HOME/.rvm/scripts/rvm
-                gem install adcdownload
-              fi
-              backto=$(pwd)
-              cd $root/.downloads/
-              printf "You may be asked to enter your Apple account credentials:\n"
-              adcdownload get http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type
-              cd $backto
-            )
-            ;;
-          *)
-            read -rsp $'Please download Xcode from http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type.  Move the downloaded file to ~/.macosa/.downloads/, then press any key continue.\n' -n1 key
-            ;;
-        esac
 
-      fi
-      printf "Mouting and copying Xcode to Applications...\n"
-      sudo hdiutil attach $root/.downloads/$file_basename.$download_file_type
-      sudo cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
+elif [ $install_type == 'full' ]; then
+
+    # Mount and install
+  if [ ! -d /Applications/Xcode.app ]; then
+    if [ ! -f $root/.downloads/$file_basename.$download_file_type ]; then
+      read -rp $'We can try to download Xcode for you automatically, but you need to make sure you don\'t have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download it automatically? [Y/n] ' response
+      case "$response" in
+        [yY][eE][sS]|[yY])
+          (
+            if ! command -v adcdownload &>/dev/null; then
+              source $HOME/.rvm/scripts/rvm
+              gem install adcdownload
+            fi
+            backto=$(pwd)
+            cd $root/.downloads/
+            printf "You may be asked to enter your Apple account credentials:\n"
+            adcdownload get http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type
+            cd $backto
+          )
+          ;;
+        *)
+          read -rsp $'Please download Xcode from http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type.  Move the downloaded file to ~/.macosa/.downloads/, then press any key continue.\n' -n1 key
+          ;;
+      esac
     fi
+    printf "Mouting and copying Xcode to Applications...\n"
+    sudo hdiutil attach $root/.downloads/$file_basename.$download_file_type
+    sudo cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
 
     printf "You must agree to the Xcode license in order to complete the installation...\n"
     sudo xcrun cc
 
     # Unmount the installation image
-    if mount | grep "on /Volumes/Xcode" > /dev/null; then
+    if mount | grep "on /Volumes/Xcode" &>/dev/null; then
       sudo hdiutil unmount "/Volumes/Xcode"
     fi
     printf "Xcode is finished installing.\n"
