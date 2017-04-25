@@ -8,7 +8,7 @@ Any files in here with `.cfg` extension will be loaded for root MacOSa (bash var
 
 ## `vars`
 
-This is where your custom Ansible vars go. There are some example files placed in the `vars` directory for you to reference.
+This is where your custom Ansible vars go.
 
 ## `templates`
 
