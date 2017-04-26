@@ -28,15 +28,15 @@
 
   roles:
 
-    - { role: homebrew, when: "'homebrew' in roles", tags: [ homebrew ] }
-    - { role: python, when: "'python' in roles", tags: [ python ] }
-    - { role: node, when: "'node' in roles", tags: [ node ] }
-    - { role: ruby, when: "'ruby' in roles", tags: [ ruby ] }
-    - { role: browsers, when: "'browsers' in roles", tags: [ browsers ] }
-    - { role: aws, when: "'aws' in roles", tags: [ aws ] }
-    - { role: projects, when: "'projects' in roles", tags: [ projects ] }
-    - { role: user, when: "'user' in roles", tags: [ user ] }
-    - { role: system, when: "'system' in roles", tags: [ system ] }
+    - { role: homebrew, when: "'homebrew' in _roles", tags: [ homebrew ] }
+    - { role: python, when: "'python' in _roles", tags: [ python ] }
+    - { role: node, when: "'node' in _roles", tags: [ node ] }
+    - { role: ruby, when: "'ruby' in _roles", tags: [ ruby ] }
+    - { role: browsers, when: "'browsers' in _roles", tags: [ browsers ] }
+    - { role: aws, when: "'aws' in _roles", tags: [ aws ] }
+    - { role: projects, when: "'projects' in _roles", tags: [ projects ] }
+    - { role: user, when: "'user' in _roles", tags: [ user ] }
+    - { role: system, when: "'system' in _roles", tags: [ system ] }
 
   tasks:
 

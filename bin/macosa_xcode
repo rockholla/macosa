@@ -4,7 +4,7 @@
 
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 root="$this_dir/.."
-install_type="${1:-full}"
+install_type="${1:-tools}"
 download_file_type="xip"
 
 if [ -z $xcode_version ]; then
@@ -22,10 +22,10 @@ if [ $xcode_version == '8.3.2' ]; then
   file_basename="Xcode$xcode_version"
 fi
 
-printf "Checking to see if Xcode or Xcode tools are installed...\n"
 if [ $install_type == 'tools' ]; then
 
   if ! xcode-select --print-path &>/dev/null; then
+    printf "Installing Xcode tools...\n"
     # Prompt user to install the XCode Command Line Tools
     xcode-select --install &>/dev/null
 
@@ -41,9 +41,10 @@ if [ $install_type == 'tools' ]; then
 
 elif [ $install_type == 'full' ]; then
 
-    # Mount and install
+  # Mount and install
   if [ ! -d /Applications/Xcode.app ]; then
-    if [ ! -f $root/.downloads/$file_basename.$download_file_type ]; then
+    printf "Installing Xcode...\n"
+    if [ ! -f "$root/.downloads/$file_basename.$download_file_type" ]; then
       read -rp $'We can try to download Xcode for you automatically, but you need to make sure you don\'t have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download it automatically? [Y/n] ' response
       case "$response" in
         [yY][eE][sS]|[yY])
@@ -64,12 +65,25 @@ elif [ $install_type == 'full' ]; then
           ;;
       esac
     fi
-    printf "Mouting and copying Xcode to Applications...\n"
-    sudo hdiutil attach $root/.downloads/$file_basename.$download_file_type
-    sudo cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
+    if [ $download_file_type == 'xip' ]; then
+      if [ ! -s /tmp/Xcode.app ]; then
+        rsync "$root/.downloads/$file_basename.$download_file_type" /tmp/
+        open "/tmp/$file_basename.$download_file_type"
+        printf "Waiting for Xcode xip to be extracted...\n"
+        until [ -s /tmp/Xcode.app ]; do
+          sleep 5
+        done
+      fi
+      printf "Installing extracted Xcode.app to Applications...\n"
+      sudo rsync -a /tmp/Xcode.app/ /Applications/Xcode.app
+    else
+      sudo hdiutil attach "$root/.downloads/$file_basename.$download_file_type"
+      printf "Installing Xcode from mount to Applications...\n"
+      sudo cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
+    fi
 
     printf "You must agree to the Xcode license in order to complete the installation...\n"
-    sudo xcrun cc
+    sudo xcrun cc 2>/dev/null
 
     # Unmount the installation image
     if mount | grep "on /Volumes/Xcode" &>/dev/null; then

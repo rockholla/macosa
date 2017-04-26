@@ -8,4 +8,6 @@ if ! command -v rvm &>/dev/null; then
   source $HOME/.rvm/scripts/rvm
   rvm install ruby --latest
   rvm use ruby --latest --default
+  read -rsp $'A restart is needed after installing rvm.  Press any key to restart...\n' -n1 key
+  sudo shutdown -r now "Restarting now..."
 fi

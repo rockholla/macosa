@@ -2,16 +2,21 @@
 
 restart_required=false
 
-# OSX system updates, installs all updates available
 printf "Running system software update...\n"
 
 # Check if there are any updates that require a restart
-if sudo softwareupdate -la --verbose | grep "restart"; then
+available_updates=$((sudo softwareupdate -la --verbose) 2>&1)
+
+if echo $available_updates | grep "restart" &>/dev/null; then
   printf "A restart will be required after the update is complete.\n"
   restart_required=true
 fi
 
-sudo softwareupdate -ia --verbose --no-scan
+if echo $available_updates | grep "No new software" &>/dev/null; then
+  printf "No updates available\n"
+else
+  sudo softwareupdate -ia --verbose --no-scan
+fi
 
 if $restart_required; then
   read -rsp $'Press any key to restart...\n' -n1 key
