@@ -47,9 +47,9 @@
   tags: [ ssh ]
 
 - name: Copy ssh files to ~/.ssh
-  copy:
+  synchronize:
     src: "{{ item }}"
-    dest: "~/.ssh/"
+    dest: "~/.ssh/{{ item.split('/')[-1] }}"
   when: "item.split('/')[-1] != '.keep'"
   with_fileglob:
     - "{{ playbook_dir }}/user/files/.ssh/*"
