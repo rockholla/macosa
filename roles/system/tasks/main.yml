@@ -11,7 +11,7 @@
   command: "systemsetup -setcomputername {{ computer_name }}"
   become: yes
   become_method: sudo
-  when: "'{{ computer_name }}' not in '{{ current_computer_name.stdout }}'"
+  when: "computer_name not in current_computer_name.stdout"
 
 - name: Check current power management settings
   shell: "pmset -a -g | grep -E \"^(\\s){{ item.key }}(\\s+)([0-9]+)(.*?)$\" | grep -oE \"[0-9]+\""

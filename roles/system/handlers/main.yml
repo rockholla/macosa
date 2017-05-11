@@ -9,6 +9,5 @@
     killall -HUP SystemUIServer
 
 - name: logout
-  become: yes
   command: >
-    {{ playbook_dir }}/bin/macosa_logout force
+    touch {{ playbook_dir }}/.logout

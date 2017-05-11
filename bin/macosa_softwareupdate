@@ -19,6 +19,7 @@ else
 fi
 
 if $restart_required; then
+  say "You need to restart your computer to continue"
   read -rsp $'Press any key to restart...\n' -n1 key
   sudo shutdown -r now "Restarting now to complete software update..."
 fi

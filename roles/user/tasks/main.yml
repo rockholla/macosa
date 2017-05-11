@@ -27,7 +27,7 @@
 
 - name: Get current account avatar
   command: >
-    dscl . read ~/ Picture
+    dscl . read /Users/{{ ansible_user_id }} Picture
   register: "current_account_avatar"
   when: "account.avatar_path != None"
   changed_when: false
@@ -35,8 +35,8 @@
 
 - name: Set account avatar
   command: >
-    {{ playbook_dir }}/bin/macosa_setaccountavatar {{ account.avatar_path }}
-  when: "(account.avatar_path != None) and ('{{ account.avatar_path }}' not in '{{ current_account_avatar.stdout }}')"
+    {{ playbook_dir }}/bin/macosa_setaccountavatar {{ ansible_user_id }} {{ account.avatar_path }}
+  when: "(account.avatar_path != None) and (account.avatar_path not in current_account_avatar.stdout)"
   tags: [ avatar ]
 
 - name: Ensure .ssh directory exists.

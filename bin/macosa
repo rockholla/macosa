@@ -126,3 +126,9 @@ if [ -f user/reminders/after ]; then
   cat user/reminders/after
   printf "\033[0m\n"
 fi
+
+if [ -f .logout ] || [ $logout == true ]; then
+  printf "This run requires you to log out and back in:\n"
+  ./bin/macosa_logout
+  rm .logout
+fi

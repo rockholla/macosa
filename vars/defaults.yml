@@ -1,5 +1,6 @@
 ---
 
+logout: no
 _roles:
   - homebrew
   - python
