@@ -1,4 +1,0 @@
-#!/bin/bash
-
-printf "Running the docker-local provisioner...\n"
-ansible-playbook -i inventory/all docker-local.yml "$@"

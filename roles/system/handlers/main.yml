@@ -2,11 +2,11 @@
 
 - name: restart dock
   command: >
-    killall -HUP Dock
+    killall Dock
 
 - name: restart systemuiserver
   command: >
-    killall -HUP SystemUIServer
+    killall SystemUIServer
 
 - name: logout
   command: >

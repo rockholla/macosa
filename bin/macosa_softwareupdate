@@ -1,6 +1,8 @@
 #!/bin/bash
 
+macosa_bin_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 restart_required=false
+on_reboot="$1"
 
 printf "Running system software update...\n"
 
@@ -19,7 +21,5 @@ else
 fi
 
 if $restart_required; then
-  say "You need to restart your computer to continue"
-  read -rsp $'Press any key to restart...\n' -n1 key
-  sudo shutdown -r now "Restarting now to complete software update..."
+  $macosa_bin_dir/macosa_reboot "$on_reboot"
 fi

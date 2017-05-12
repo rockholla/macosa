@@ -36,6 +36,7 @@
 - name: Set account avatar
   command: >
     {{ playbook_dir }}/bin/macosa_setaccountavatar {{ ansible_user_id }} {{ account.avatar_path }}
+  become: yes
   when: "(account.avatar_path != None) and (account.avatar_path not in current_account_avatar.stdout)"
   tags: [ avatar ]
 

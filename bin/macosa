@@ -10,12 +10,11 @@ done
 
 update=false
 logout=false
-xcode="tools"
 passthru=""
 
 function usage () {
    cat <<EOF
-Usage: `basename "$0"` [-h] [-u] [-l] [-x full|tools]
+Usage: `basename "$0"` [-h] [-u] [-l]
 
 Options:
   -h    Show this help
@@ -76,7 +75,7 @@ fi
 # Install Homebrew
 if ! command -v brew &>/dev/null; then
   printf "Installing Homebrew...\n"
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" </dev/null
+  yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 else
   printf "Homebrew is installed.\n"
 fi

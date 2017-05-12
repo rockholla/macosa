@@ -1,13 +1,10 @@
-/user/**/*
-!/user/**/*/
-!README.md
-!.example
-!.keep
-
 *.DS_Store
 *.retry
 .downloads/*
 !.downloads/.keep
 .vaultpass
-
 .logout
+user
+vars/macosa-generated.yml
+bin/onboot/*
+!bin/onboot/.keep

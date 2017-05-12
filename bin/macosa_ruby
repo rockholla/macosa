@@ -3,12 +3,12 @@
 # Install RVM
 # Mac's ruby version is notoriously behind, so let's ensure a little more control of ruby with rvm from the get-go
 
+on_reboot="$1"
+
 if ! command -v rvm &>/dev/null; then
   curl -sSL https://get.rvm.io | bash
   source $HOME/.rvm/scripts/rvm
   rvm install ruby --latest
   rvm use ruby --latest --default
-  say "You need to restart your computer to continue"
-  read -rsp $'A restart is needed after installing rvm.  Press any key to restart...\n' -n1 key
-  sudo shutdown -r now "Restarting now..."
+  $macosa_bin_dir/macosa_reboot "$on_reboot"
 fi

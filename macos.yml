@@ -3,10 +3,12 @@
   connection: local
   become: no
 
-  vars_files:
-    - vars/defaults.yml
-
   pre_tasks:
+
+    - name: Include default variables
+      include_vars:
+        dir: vars
+      tags: [ always ]
 
     - name: Include user-supplied variables
       include_vars:
@@ -60,7 +62,7 @@
 
     - name: Syncing MacOSa install back to install source (if available)
       synchronize:
-        src: "~/.macosa/"
+        src: "/Users/{{ ansible_user_id }}/.macosa/"
         dest: "{{ macosa_install_source }}/"
         delete: yes
       when: "macosa_install_source_check.stat.exists"
