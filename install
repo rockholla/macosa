@@ -127,6 +127,13 @@ if [ ! -d ~/.macosa/user ]; then
   read -p "If you have one, please enter the git ssh repo URI where your MacOSa customizations live (if blank, we'll just create a base repo locally for you from https://github.com/rockholla/mymacosa): " mymacosa_repo
   if [ ! -z $mymacosa_repo ];
     read -p "And a particular version of the repo you'd like to check out? (default = master): " mymacosa_repo_version
+    if [ -z $mymacosa_repo_version ]; then
+      mymacosa_repo_version="master"
+    fi
+    git clone $mymacosa_repo ~/.macosa/user
+    cd ~/.macosa/user
+    git checkout $mymacosa_repo_version
+    cd "$install_source"
   else
     cd /tmp
     curl -L -o master.zip https://github.com/rockholla/mymacosa/zipball/master/
