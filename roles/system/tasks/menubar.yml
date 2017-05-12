@@ -4,13 +4,13 @@
   shell: >
     /usr/libexec/PlistBuddy -c "Print menuExtras" ~/Library/Preferences/com.apple.systemuiserver.plist | sed -n {{ item.0 + 2 }}p
   register: "menubar_item_search"
-  changed_when: "'{{ item.1 }}' not in '{{ menubar_item_search.stdout }}'"
+  changed_when: "item.1 not in menubar_item_search.stdout"
   ignore_errors: yes
   with_indexed_items: "{{ menubar }}"
 
 - name: Set menu bar items
   shell: >
     defaults write com.apple.systemuiserver menuExtras -array "/System/Library/CoreServices/Menu Extras/{{ menubar | join('.menu" "/System/Library/CoreServices/Menu Extras/') }}.menu"
-  when: "{{ menubar_item_search.changed }}"
+  when: "menubar_item_search.changed"
   notify:
     - restart systemuiserver

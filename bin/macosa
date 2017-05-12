@@ -130,4 +130,6 @@ if [ -f .logout ] || [ $logout == true ]; then
   printf "This run requires you to log out and back in:\n"
   ./bin/macosa_logout
   rm .logout
+else
+  exec bash ~/.bash_profile
 fi

@@ -21,7 +21,7 @@
 
 - name: Configure power management settings
   shell: "pmset -a {{ item.item.key }} {{ item.item.value }}"
-  when: "{{ item.item.value }} != {{ item.stdout }}"
+  when: "(item.item.value | int) != (item.stdout | int)"
   become: yes
   become_method: sudo
   with_items: "{{ current_power_management.results }}"

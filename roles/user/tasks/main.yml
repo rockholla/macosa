@@ -7,7 +7,6 @@
     line: "{{ item }}"
     insertbefore: BOF
   with_items:
-    - "[[ -s ~/.bashrc ]] && source ~/.bashrc"
     - "[[ -s ~/.profile ]] && source ~/.profile"
     - "[[ -s ~/.bash_aliases ]] && source ~/.bash_aliases"
     - "export PATH=/usr/local/bin:/usr/local/sbin:~/.macosa/bin:~/.macosa/user/bin:$PATH"

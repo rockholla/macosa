@@ -53,17 +53,3 @@
     - name: Include user-supplied post tasks
       include: "{{ item.path }}"
       with_items: "{{ user_post_tasks.files }}"
-
-    - name: Look for MacOSa install source
-      stat:
-        path: "{{ macosa_install_source }}"
-      register: macosa_install_source_check
-      tags: [ always ]
-
-    - name: Syncing MacOSa install back to install source (if available)
-      synchronize:
-        src: "/Users/{{ ansible_user_id }}/.macosa/"
-        dest: "{{ macosa_install_source }}/"
-        delete: yes
-      when: "macosa_install_source_check.stat.exists"
-      tags: [ always ]

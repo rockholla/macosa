@@ -9,7 +9,7 @@
 - name: Ensure nvm initialization line is present in .bash_profile
   lineinfile:
     dest: ~/.bash_profile
-    insertbefore: '^.*\.rvm/scripts/rvm.*'
+    insertafter: '# END MacOSa managed block'
     line: 'export NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
 
 - name: Install nvm
@@ -43,7 +43,7 @@
     source ~/.nvm/nvm.sh; nvm install {{ item.item }}
   register: nvm_node_install
   with_items: "{{ nvm_node_versions_check.results }}"
-  when: "{{ item.stdout == '' }}"
+  when: "item.stdout == ''"
 
 - name: Get current node version being used
   shell: >
@@ -55,4 +55,4 @@
 - name: Set default node version
   shell: >
     source ~/.nvm/nvm.sh; nvm alias default {{ node_default_version }}
-  when: "{{ (node_default_version != None) and (nvm_current_node_version.stdout != (nvm_stable_version_stripped if node_default_version == 'stable' else (node_default_version | regex_replace('^([0-9].*)', 'v\\1')))) }}"
+  when: "(node_default_version != None) and (nvm_current_node_version.stdout != (nvm_stable_version_stripped if node_default_version == 'stable' else (node_default_version | regex_replace('^([0-9].*)', 'v\\1'))))"

@@ -7,4 +7,4 @@
 
 - name: Set default browser
   shell: "{{ playbook_dir }}/bin/defaultbrowser -set {{ default_browser }}"
-  when: "'Current: {{ default_browser }}' not in '{{ current_default_browser.stdout }}'"
+  when: "default_browser not in current_default_browser.stdout"

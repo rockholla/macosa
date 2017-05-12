@@ -8,7 +8,8 @@ on_reboot="$1"
 if ! command -v rvm &>/dev/null; then
   curl -sSL https://get.rvm.io | bash
   source $HOME/.rvm/scripts/rvm
-  rvm install ruby --latest
-  rvm use ruby --latest --default
+  stable_version=$(rvm list known strings | grep -E "^ruby\-[0-9]+" | sed -n 1p)
+  rvm install $stable_version
+  rvm use --default $stable_version
   $macosa_bin_dir/macosa_reboot "$on_reboot"
 fi

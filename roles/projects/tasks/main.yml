@@ -5,7 +5,7 @@
     name: aws
   vars:
     aws_cli_profiles: "{{ project.value.aws_cli_profiles }}"
-    aws_cli_profiles_active: "{{ project.value.active }}"
+    aws_cli_profiles_active: "project.value.active"
   with_dict: "{{ projects }}"
   loop_control:
     loop_var: project
