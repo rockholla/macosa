@@ -42,16 +42,28 @@
 
 - name: Ensure .ssh directory exists.
   file:
-    dest: "~/.ssh"
+    dest: "/Users/{{ ansible_user_id }}/.ssh"
     mode: 0700
     state: directory
   tags: [ ssh ]
 
-- name: Copy ssh files to ~/.ssh
-  synchronize:
-    src: "{{ item }}"
-    dest: "~/.ssh/{{ item.split('/')[-1] }}"
-  when: "item.split('/')[-1] != '.keep'"
-  with_fileglob:
-    - "{{ playbook_dir }}/user/files/.ssh/*"
-  tags: [ ssh ]
+- name: Write ssh config
+  copy:
+    content: "{{ ssh['config'] }}"
+    dest: "/Users/{{ ansible_user_id }}/.ssh/config"
+    mode: 0600
+
+- name: Write ssh private key files
+  copy:
+    content: "{{ item.private }}"
+    dest: "/Users/{{ ansible_user_id }}/.ssh/{{ item.name }}"
+    mode: 0600
+  with_items: "{{ ssh['keys'] }}"
+
+- name: Write ssh public key files
+  copy:
+    content: "{{ item.public }}"
+    dest: "/Users/{{ ansible_user_id }}/.ssh/{{ item.name }}.pub"
+    mode: 0644
+  when: item.public is defined
+  with_items: "{{ ssh['keys'] }}"

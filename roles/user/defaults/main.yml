@@ -2,3 +2,7 @@
 
 account:
   avatar_path:
+
+ssh:
+  config: ""
+  keys: []
