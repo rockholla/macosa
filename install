@@ -1,21 +1,15 @@
 #!/bin/bash
 
-install_source="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd "$install_source"
-source config/defaults.cfg
-for user_config_file in user/config/*.cfg; do
-  [ -f "$user_config_file" ] || continue
-  source user_config_file
-done
-
 passthru=""
 xcode="tools"
+remote=false
 
 function usage () {
    cat <<EOF
-Usage: `basename "$0"` [-h] [-x full|tools]
+Usage: `basename "$0"` [-r] [-h] [-x full|tools]
 
 Options:
+  -r                        If present, this is a remote install and the repo should be downloaded locally first
   -h                        Show this help
   -x [Xcode install type]   If "full", will ensure full XCode installation, if "tools" just installs XCode cli tools (default is "tools")
 
@@ -25,6 +19,10 @@ EOF
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    -r)
+      remote=true
+      shift
+      ;;
     -h)
       usage
       shift
@@ -38,6 +36,22 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
   esac
+done
+
+if $remote; then
+  cd /tmp
+  curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
+  unzip master.zip
+  mv rockholla-macosa* macosa
+  install_source="/tmp/macosa"
+else
+  install_source="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+fi
+cd "$install_source"
+source config/defaults.cfg
+for user_config_file in user/config/*.cfg; do
+  [ -f "$user_config_file" ] || continue
+  source user_config_file
 done
 
 if pwd | grep $HOME &>/dev/null; then
