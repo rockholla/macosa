@@ -1,3 +1,4 @@
+.installed
 *.DS_Store
 *.retry
 .downloads/*

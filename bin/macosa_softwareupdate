@@ -7,7 +7,7 @@ on_reboot="$1"
 printf "Running system software update...\n"
 
 # Check if there are any updates that require a restart
-available_updates=$((sudo softwareupdate -la --verbose) 2>&1)
+available_updates=$(sudo softwareupdate -la --verbose 2>&1)
 
 if echo $available_updates | grep "restart" &>/dev/null; then
   printf "A restart will be required after the update is complete.\n"

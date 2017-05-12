@@ -45,7 +45,9 @@ elif [ $install_type == 'full' ]; then
   if [ ! -d /Applications/Xcode.app ]; then
     printf "Installing Xcode...\n"
     if [ ! -f "$root/.downloads/$file_basename.$download_file_type" ]; then
-      read -rp $'We can try to download Xcode for you automatically, but you need to make sure you don\'t have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download it automatically? [Y/n] ' response
+      question="We can try to download Xcode for you automatically, but you need to make sure you don't have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download Xcode automatically?"
+      say "$question"
+      read -rp $'${question} [Y/n] ' response
       case "$response" in
         [yY][eE][sS]|[yY])
           (
@@ -82,7 +84,9 @@ elif [ $install_type == 'full' ]; then
       sudo cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
     fi
 
-    printf "You must agree to the Xcode license in order to complete the installation...\n"
+    notice="You must agree to the Xcode license in order to complete the installation"
+    say "$notice"
+    printf "${notice}...\n"
     sudo xcrun cc 2>/dev/null
 
     # Unmount the installation image
