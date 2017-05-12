@@ -3,7 +3,7 @@
 ## Getting Started
 
 1. Install your operating system
-2. Checkout the help on the install script:
+2. See info on how to run the install script:
 ```
 curl https://raw.githubusercontent.com/rockholla/macosa/master/install | bash -s -- -h
 ```
