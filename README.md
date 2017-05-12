@@ -1,12 +1,6 @@
-# MacOSa gives you the power to automate your MacOS environment
+# MacOSa gives you the power to automate the state of your MacOS or OSX environment
 
 ## Create a bootable USB of MacOS
-
-```
-sudo /Applications/Install\ macOS\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/Untitled --applicationpath /Applications/Install\ macOS\ Sierra.app --nointeraction &&say Done
-```
-
-Depending on the USB drive you're using, you may replace `/Volumes/Untitled` above with the path to your drive
 
 ## Getting Started
 
