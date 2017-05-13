@@ -45,7 +45,7 @@ if $remote; then
   printf "Downloading MacOSa source files...\n"
   curl -H 'Cache-Control: no-cache' -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
   unzip master.zip
-  if [ -d /tmp/macosa ];
+  if [ -d /tmp/macosa ]; then
     rm -rf /tmp/macosa
   fi
   mv rockholla-macosa* macosa
