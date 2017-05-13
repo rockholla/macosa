@@ -5,12 +5,14 @@ xcode="tools"
 remote=false
 root_pass=""
 root_pass_confirm=""
+fresh=false
 
 function usage () {
    cat <<EOF
-Usage: `basename "$0"` [-r] [-h] [-x full|tools]
+Usage: `basename "$0"` [-f] [-r] [-h] [-x full|tools]
 
 Options:
+  -f                        Force a fresh install
   -r                        If present, this is a remote install and the repo should be downloaded locally first
   -h                        Show this help
   -x [Xcode install type]   If "full", will ensure full XCode installation, if "tools" just installs XCode cli tools (default is "tools")
@@ -21,6 +23,10 @@ EOF
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    -f)
+      fresh=true
+      shift
+      ;;
     -r)
       remote=true
       shift
@@ -42,15 +48,17 @@ done
 
 if $remote; then
   cd ~/Downloads
-  printf "Downloading MacOSa source files...\n"
-  rm -rf ~/Downloads/macosa* &>/dev/null
-  rm -rf ~/Downloads/rockholla* &>/dev/null
-  rm -rf ~/Downloads/master.zip &>/dev/null
-  curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
-  unzip master.zip &>/dev/null
-  mv rockholla-macosa* macosa
+  if [ ! -d macosa ] || [ $fresh == true ]; then
+    printf "Downloading MacOSa source files...\n"
+    rm -rf ~/Downloads/macosa* &>/dev/null
+    rm -rf ~/Downloads/rockholla* &>/dev/null
+    rm -rf ~/Downloads/master.zip &>/dev/null
+    curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
+    unzip master.zip &>/dev/null
+    mv rockholla-macosa* macosa
+    rm master.zip
+  fi
   install_source="$(pwd)/macosa"
-  rm master.zip
 else
   install_source="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 fi
@@ -87,6 +95,9 @@ echo "$root_pass" | sudo -S systemsetup -setcomputersleep Never &> /dev/null
 echo "$root_pass" | sudo -S systemsetup -setdisplaysleep Never &> /dev/null
 
 # Time to install the MacOSa files and record a few things
+if $fresh; then
+  rm -rf ~/.macosa
+fi
 if [ ! -d ~/.macosa ]; then
   printf "Installing MacOSa to your machine...\n"
   # Install this repo to ~/.macosa
@@ -121,7 +132,6 @@ fi
 # Let's run a system software update first before installing
 ./bin/macosa_softwareupdate '$install_source/install "$@"'
 # We need at least xcode tools installed before installing rvm
-say "To continue, please click install in the following popup window"
 ./bin/macosa_xcode tools 1>/dev/null
 # We need ruby/rvm early on in the process
 ./bin/macosa_ruby '$install_source/install "$@"'

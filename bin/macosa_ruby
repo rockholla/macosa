@@ -6,12 +6,17 @@
 macosa_bin_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 on_reboot="$1"
 
+function reset_sudoers() {
+  echo $(cat ~/.macosa/.vaultpass) | sudo -S sed -i 's/^%admin\s+ALL(\s+)?=(\s+)?\(ALL\)[\sa-zA-Z:]+$/%admin ALL = (ALL) ALL/g' /etc/sudoers
+}
+
 $macosa_bin_dir/macosa_homebrew
 if ! command -v rvm &>/dev/null; then
   curl -sSL https://get.rvm.io | bash
   source $HOME/.rvm/scripts/rvm
   stable_version=$(rvm list known strings | grep -E "^ruby\-[0-9]+" | sed -n 1p)
-  echo $(cat ~/.macosa/.vaultpass) | sudo -S rvm install $stable_version
+  echo $(cat ~/.macosa/.vaultpass) | sudo -S sed -i 's/^%admin\s+ALL(\s+)?=(\s+)?\(ALL\)[\sa-zA-Z:]+$/%admin ALL = (ALL) NOPASSWD:ALL/g' /etc/sudoers
+  rvm install $stable_version || reset_sudoers
   rvm use --default $stable_version
   $macosa_bin_dir/macosa_reboot "$on_reboot"
 fi
