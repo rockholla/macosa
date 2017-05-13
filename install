@@ -14,10 +14,10 @@ function usage () {
 Usage: `basename "$0"` [-f] [-r] [-h] [-x full|tools]
 
 Options:
-  -f                        Force a fresh install
-  -r                        If present, this is a remote install and the repo should be downloaded locally first
-  -h                        Show this help
-  -x [Xcode install type]   If "full", will ensure full XCode installation, if "tools" just installs XCode cli tools (default is "tools")
+  -f                    Force a fresh install
+  -r                    If present, this is a remote install and the repo should be downloaded locally first
+  -h                    Show this help
+  -x [tools|<version>]  If an Xcode version is supplied for this argument, MacOSa will install that version, if "tools" just installs XCode cli tools (default = "tools")
 
 EOF
   exit 0

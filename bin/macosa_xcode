@@ -7,22 +7,7 @@ root="$this_dir/.."
 install_type="${1:-tools}"
 download_file_type="xip"
 
-if [ -z $xcode_version ]; then
-  printf "\033[31m'xcode_version' environment or local variable is not set and needs to be for running this script\033[0m\n"
-  exit 1
-fi
-
-file_basename="Xcode_$xcode_version"
-version_parts=(${xcode_version//./ })
-major_version="${version_parts[0]}"
-if [[ $major_version < "8" ]]; then
-  download_file_type="dmg"
-fi
-if [ $xcode_version == '8.3.2' ]; then
-  file_basename="Xcode$xcode_version"
-fi
-
-if [ $install_type == 'tools' ]; then
+if [ $install_type == "tools" ]; then
 
   if ! xcode-select --print-path &>/dev/null; then
     printf "Installing Xcode tools...\n"
@@ -40,15 +25,25 @@ if [ $install_type == 'tools' ]; then
     printf "Xcode tools are already installed\n"
   fi
 
-elif [ $install_type == 'full' ]; then
+elif [ "$install_type" =~ ^[0-9\.]+$ ]; then
+
+  xcode_version="$install_type"
+  file_basename="Xcode_$xcode_version"
+  version_parts=(${xcode_version//./ })
+  major_version="${version_parts[0]}"
+  if [[ $major_version < "8" ]]; then
+    download_file_type="dmg"
+  fi
+  if [ $xcode_version == '8.3.2' ]; then
+    file_basename="Xcode$xcode_version"
+  fi
 
   # Mount and install
   if [ ! -d /Applications/Xcode.app ]; then
     printf "Installing Xcode...\n"
     if [ ! -f "$root/.downloads/$file_basename.$download_file_type" ]; then
-      question="We can try to download Xcode for you automatically, but you need to make sure you don't have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download Xcode automatically?"
-      say "$question"
-      read -r "$question [Y/n] " response
+      say "We can help you download Xcode for you automatically, please read the following and respond to continue"
+      read -r "We can try to download Xcode for you automatically, but you need to make sure you don't have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download Xcode automatically? [Y/n] " response
       case "$response" in
         [yY][eE][sS]|[yY])
           (
