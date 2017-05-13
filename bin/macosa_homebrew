@@ -8,5 +8,8 @@ else
 fi
 
 if ! command -v wget &>/dev/null; then
+  printf "Installing wget...\n"
   brew install wget
+else
+  printf "wget is installed.\n"
 fi
