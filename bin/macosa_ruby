@@ -11,7 +11,7 @@ if ! command -v rvm &>/dev/null; then
   curl -sSL https://get.rvm.io | bash
   source $HOME/.rvm/scripts/rvm
   stable_version=$(rvm list known strings | grep -E "^ruby\-[0-9]+" | sed -n 1p)
-  echo $(cat ~/.macosa/.vaultpass) | sudo -S printf "Refreshing sudo rights"
+  echo $(cat ~/.macosa/.vaultpass) | sudo -S printf "Refreshing sudo rights\n"
   rvm install $stable_version || reset_sudoers
   rvm use --default $stable_version
   $macosa_bin_dir/macosa_reboot "$on_reboot"
