@@ -43,7 +43,7 @@ done
 if $remote; then
   cd /tmp
   printf "Downloading MacOSa source files...\n"
-  curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
+  curl -H 'Cache-Control: no-cache' -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
   unzip master.zip
   if [ -d /tmp/macosa ];
     rm -rf /tmp/macosa
@@ -141,7 +141,7 @@ if [ ! -d ~/.macosa/user ]; then
     cd "$install_source"
   else
     cd /tmp
-    curl -L -o master.zip https://github.com/rockholla/mymacosa/zipball/master/
+    curl -H 'Cache-Control: no-cache' -L -o master.zip https://github.com/rockholla/mymacosa/zipball/master/
     unzip master.zip
     mv rockholla-mymacosa* ~/.macosa/user
     rm master.zip
