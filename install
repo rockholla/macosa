@@ -41,15 +41,15 @@ while [[ $# -gt 0 ]]; do
 done
 
 if $remote; then
-  cd /tmp
+  cd ~/Downloads
   printf "Downloading MacOSa source files...\n"
-  rm -rf /tmp/macosa* &>/dev/null
-  rm -rf /tmp/rockholla* &>/dev/null
-  rm -rf /tmp/master.zip &>/dev/null
+  rm -rf ~/Downloads/macosa* &>/dev/null
+  rm -rf ~/Downloads/rockholla* &>/dev/null
+  rm -rf ~/Downloads/master.zip &>/dev/null
   curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
   unzip master.zip &>/dev/null
   mv rockholla-macosa* macosa
-  install_source="/tmp/macosa"
+  install_source="~/Downloads/macosa"
   rm master.zip
 else
   install_source="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -141,7 +141,7 @@ if [ ! -d ~/.macosa/user ]; then
     git checkout $mymacosa_repo_version
     cd "$install_source"
   else
-    cd /tmp
+    cd ~/Downloads
     curl -L -o master.zip https://github.com/rockholla/mymacosa/zipball/master/
     unzip master.zip
     mv rockholla-mymacosa* ~/.macosa/user
