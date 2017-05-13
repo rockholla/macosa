@@ -30,14 +30,14 @@
 
   roles:
 
-    - { role: homebrew, when: "'homebrew' in _roles", tags: [ homebrew ] }
-    - { role: python, when: "'python' in _roles", tags: [ python ] }
-    - { role: node, when: "'node' in _roles", tags: [ node ] }
-    - { role: ruby, when: "'ruby' in _roles", tags: [ ruby ] }
-    - { role: browsers, when: "'browsers' in _roles", tags: [ browsers ] }
-    - { role: aws, when: "'aws' in _roles", tags: [ aws ] }
-    - { role: user, when: "'user' in _roles", tags: [ user ] }
-    - { role: system, when: "'system' in _roles", tags: [ system ] }
+    - { role: homebrew, when: "'homebrew' in include_macosa_roles", tags: [ homebrew ] }
+    - { role: python, when: "'python' in include_macosa_roles", tags: [ python ] }
+    - { role: node, when: "'node' in include_macosa_roles", tags: [ node ] }
+    - { role: ruby, when: "'ruby' in include_macosa_roles", tags: [ ruby ] }
+    - { role: browsers, when: "'browsers' in include_macosa_roles", tags: [ browsers ] }
+    - { role: aws, when: "'aws' in include_macosa_roles", tags: [ aws ] }
+    - { role: user, when: "'user' in include_macosa_roles", tags: [ user ] }
+    - { role: system, when: "'system' in include_macosa_roles", tags: [ system ] }
 
   tasks:
 
