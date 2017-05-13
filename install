@@ -3,6 +3,8 @@
 passthru=""
 xcode="tools"
 remote=false
+root_pass=""
+root_pass_confirm=""
 
 function usage () {
    cat <<EOF
