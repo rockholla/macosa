@@ -87,7 +87,7 @@ if [ ! -f "$install_source/.vaultpass" ]; then
   printf "\n"
   echo "$root_pass" > "$install_source/.vaultpass"
 else
-  root_pass = $(cat "$install_source/.vaultpass")
+  root_pass=$(cat "$install_source/.vaultpass")
 fi
 
 # disable computer and display sleep during install (assume that ansible config will set as it sees fit, so we don't need to reset)
