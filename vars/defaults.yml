@@ -9,6 +9,5 @@ _roles:
   - node
   - browsers
   - aws
-  - projects
   - user
   - system

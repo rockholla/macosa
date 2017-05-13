@@ -36,7 +36,6 @@
     - { role: ruby, when: "'ruby' in _roles", tags: [ ruby ] }
     - { role: browsers, when: "'browsers' in _roles", tags: [ browsers ] }
     - { role: aws, when: "'aws' in _roles", tags: [ aws ] }
-    - { role: projects, when: "'projects' in _roles", tags: [ projects ] }
     - { role: user, when: "'user' in _roles", tags: [ user ] }
     - { role: system, when: "'system' in _roles", tags: [ system ] }
 
