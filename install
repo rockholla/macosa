@@ -49,7 +49,7 @@ if $remote; then
   curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
   unzip master.zip &>/dev/null
   mv rockholla-macosa* macosa
-  install_source=$(pwd)
+  install_source="$(pwd)/macosa"
   rm master.zip
 else
   install_source="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
