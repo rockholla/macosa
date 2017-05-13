@@ -47,7 +47,7 @@ if $remote; then
   rm -rf /tmp/rockholla* &>/dev/null
   rm -rf /tmp/master.zip &>/dev/null
   curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
-  unzip master.zip
+  unzip master.zip &>/dev/null
   mv rockholla-macosa* macosa
   install_source="/tmp/macosa"
   rm master.zip
