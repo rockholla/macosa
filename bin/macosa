@@ -72,14 +72,6 @@ fi
 
 ./bin/macosa_ruby
 
-# Install Homebrew
-if ! command -v brew &>/dev/null; then
-  printf "Installing Homebrew...\n"
-  yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-else
-  printf "Homebrew is installed.\n"
-fi
-
 # Install Python
 
 if ! brew ls --versions python &>/dev/null; then

@@ -3,13 +3,15 @@
 # Install RVM
 # Mac's ruby version is notoriously behind, so let's ensure a little more control of ruby with rvm from the get-go
 
+macosa_bin_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 on_reboot="$1"
 
+$macosa_bin_dir/macosa_homebrew
 if ! command -v rvm &>/dev/null; then
   curl -sSL https://get.rvm.io | bash
   source $HOME/.rvm/scripts/rvm
   stable_version=$(rvm list known strings | grep -E "^ruby\-[0-9]+" | sed -n 1p)
-  rvm install $stable_version
+  echo $(cat ~/.macosa/.vaultpass) | sudo -S rvm install $stable_version
   rvm use --default $stable_version
   $macosa_bin_dir/macosa_reboot "$on_reboot"
 fi
