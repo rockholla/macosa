@@ -49,7 +49,7 @@ if $remote; then
   curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
   unzip master.zip &>/dev/null
   mv rockholla-macosa* macosa
-  install_source="~/Downloads/macosa"
+  install_source=$(pwd)
   rm master.zip
 else
   install_source="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -61,7 +61,7 @@ for user_config_file in user/config/*.cfg; do
   source user_config_file
 done
 
-if pwd | grep $HOME &>/dev/null; then
+if pwd | grep "$HOME/.macosa" &>/dev/null; then
   printf "\033[31mYou're trying to run the install from the installation destination, just run 'macosa' instead to provision\033[0m\n"
   exit 1
 fi
@@ -153,3 +153,5 @@ fi
 
 printf "\nRunning MacOSa script for local machine setup and provisioning...\n"
 ~/.macosa/bin/macosa $passthru
+
+rm -rf "$install_source"
