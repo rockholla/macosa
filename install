@@ -83,8 +83,8 @@ else
 fi
 
 # disable computer and display sleep during install (assume that ansible config will set as it sees fit, so we don't need to reset)
-echo "$root_pass" | sudo -S systemsetup -setcomputersleep Never
-echo "$root_pass" | sudo -S systemsetup -setdisplaysleep Never
+echo "$root_pass" | sudo -S systemsetup -setcomputersleep Never &> /dev/null
+echo "$root_pass" | sudo -S systemsetup -setdisplaysleep Never &> /dev/null
 
 # Time to install the MacOSa files and record a few things
 if [ ! -d ~/.macosa ]; then
