@@ -4,8 +4,6 @@ macosa_bin_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 on_reboot="$1"
 
 if [ ! -z "$on_reboot" ]; then
-  echo "#!/bin/bash" > "$macosa_bin_dir/onboot/generated.sh"
-  echo "$on_reboot" >> "$macosa_bin_dir/onboot/generated.sh"
-  chmod +x "$macosa_bin_dir/onboot/generated.sh"
+  echo "$on_reboot" > "$macosa_bin_dir/onboot/macosa_reboot"
 fi
 echo $(cat ~/.macosa/.vaultpass) | sudo -S shutdown -r now "Restarting now, any action that needs to will continue after reboot..."
