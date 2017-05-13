@@ -13,3 +13,4 @@ curl https://raw.githubusercontent.com/rockholla/macosa/master/install | bash -s
 ```
 curl https://raw.githubusercontent.com/rockholla/macosa/master/install | bash -s -- -r -x full
 ```
+4. Follow the prompts and enjoy!
