@@ -76,22 +76,22 @@ elif [[ "$install_type" =~ ^[0-9\.]+$ ]]; then
         done
       fi
       printf "Installing extracted Xcode.app to Applications...\n"
-      sudo rsync -a /tmp/Xcode.app/ /Applications/Xcode.app
+      echo $(cat ~/.macosa/.vaultpass) | sudo -S rsync -a /tmp/Xcode.app/ /Applications/Xcode.app
       rm "/tmp/$file_basename.$download_file_type"
     else
-      sudo hdiutil attach "$root/.downloads/$file_basename.$download_file_type"
+      echo $(cat ~/.macosa/.vaultpass) | sudo -S hdiutil attach "$root/.downloads/$file_basename.$download_file_type"
       printf "Installing Xcode from mount to Applications...\n"
-      sudo cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
+      echo $(cat ~/.macosa/.vaultpass) | sudo -S cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
     fi
 
     notice="You must agree to the Xcode license in order to complete the installation"
     say "$notice"
     printf "${notice}...\n"
-    sudo xcrun cc 2>/dev/null
+    echo $(cat ~/.macosa/.vaultpass) | sudo -S xcrun cc 2>/dev/null
 
     # Unmount the installation image
     if mount | grep "on /Volumes/Xcode" &>/dev/null; then
-      sudo hdiutil unmount "/Volumes/Xcode"
+      echo $(cat ~/.macosa/.vaultpass) | sudo -S hdiutil unmount "/Volumes/Xcode"
     fi
     printf "Xcode is finished installing.\n"
   else
