@@ -42,7 +42,7 @@ elif [[ "$install_type" =~ ^[0-9\.]+$ ]]; then
   if [ ! -d /Applications/Xcode.app ]; then
     printf "Installing Xcode...\n"
     if [ ! -f "$root/.downloads/$file_basename.$download_file_type" ]; then
-      say "We can help you download Xcode for you automatically, please reed the following and respond to continue"
+      say "We can help you download Xcode automatically, please reed the following and respond to continue"
       read -rp $'We can try to download Xcode for you automatically, but you need to make sure you don\'t have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download Xcode automatically? [Y/n] ' response
       case "$response" in
         [yY][eE][sS]|[yY])
