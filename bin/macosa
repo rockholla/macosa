@@ -55,7 +55,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Ask for sudo password and keep alive until this script finishes
-sudo -v
+echo $(cat ~/.macosa/.vaultpass) | sudo -S echo "setting sudo"
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
 if [ -f user/reminders/before ]; then
@@ -117,7 +117,7 @@ fi
 
 # Run the playbook
 printf "Running main playbook against local connection...\n"
-ansible-playbook -e "ansible_python_interpreter=/usr/local/bin/python" -i inventory/all $passthru macos.yml
+ansible-playbook -i inventory/all $passthru macos.yml
 
 if [ -f user/reminders/after ]; then
   printf "There are some reminders for you after this run:\n"

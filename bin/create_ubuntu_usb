@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# use diskutil list to find the right disk
-
-hdiutil convert -format UDRW -o /tmp/ubuntu.img "$1"
-diskutil unmountDisk "/dev/disk$2"
-sudo dd if=/tmp/ubuntu.img.dmg of="/dev/rdisk$2" bs=1m

@@ -1,5 +1,5 @@
 #!/bin/bash
 
-sudo dscl . delete /Users/$1 jpegphoto
-sudo dscl . delete /Users/$1 Picture
-sudo dscl . create /Users/$1 Picture "$2"
+echo $(cat ~/.macosa/.vaultpass) | sudo -S dscl . delete /Users/$1 jpegphoto
+echo $(cat ~/.macosa/.vaultpass) | sudo -S dscl . delete /Users/$1 Picture
+echo $(cat ~/.macosa/.vaultpass) | sudo -S dscl . create /Users/$1 Picture "$2"

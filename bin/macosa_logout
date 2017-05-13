@@ -3,4 +3,4 @@
 if [ "$1" != "force" ]; then
   read -rsp $'Press any key to continue by logging out...\n' -n1 key
 fi
-sudo launchctl bootout gui/$(id -u)
+echo $(cat ~/.macosa/.vaultpass) | sudo -S launchctl bootout gui/$(id -u)
