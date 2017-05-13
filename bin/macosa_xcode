@@ -48,7 +48,7 @@ elif [ $install_type == 'full' ]; then
     if [ ! -f "$root/.downloads/$file_basename.$download_file_type" ]; then
       question="We can try to download Xcode for you automatically, but you need to make sure you don't have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download Xcode automatically?"
       say "$question"
-      read -rp $'$question [Y/n] ' response
+      read -r "$question [Y/n] " response
       case "$response" in
         [yY][eE][sS]|[yY])
           (
@@ -59,7 +59,9 @@ elif [ $install_type == 'full' ]; then
             fi
             backto=$(pwd)
             cd $root/.downloads/
-            printf "You may be asked to enter your Apple account credentials:\n"
+            message="You may need to enter your Apple account credentials to start the download"
+            say "$message"
+            printf "$message...\n"
             adcdownload get http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type
             cd $backto
           )

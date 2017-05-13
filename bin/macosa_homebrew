@@ -6,3 +6,7 @@ if ! command -v brew &>/dev/null; then
 else
   printf "Homebrew is installed.\n"
 fi
+
+if ! command -v wget &>/dev/null; then
+  brew install wget
+fi
