@@ -77,6 +77,7 @@ elif [[ "$install_type" =~ ^[0-9\.]+$ ]]; then
       fi
       printf "Installing extracted Xcode.app to Applications...\n"
       sudo rsync -a /tmp/Xcode.app/ /Applications/Xcode.app
+      rm "/tmp/$file_basename.$download_file_type"
     else
       sudo hdiutil attach "$root/.downloads/$file_basename.$download_file_type"
       printf "Installing Xcode from mount to Applications...\n"
