@@ -45,6 +45,9 @@ if $remote; then
   printf "Downloading MacOSa source files...\n"
   curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
   unzip master.zip
+  if [ -d /tmp/macosa ];
+    rm -rf /tmp/macosa
+  fi
   mv rockholla-macosa* macosa
   install_source="/tmp/macosa"
   rm master.zip
@@ -80,8 +83,8 @@ else
 fi
 
 # disable computer and display sleep during install (assume that ansible config will set as it sees fit, so we don't need to reset)
-echo $root_pass | sudo -S systemsetup -setcomputersleep Never
-echo $root_pass | sudo -S systemsetup -setdisplaysleep Never
+echo "$root_pass" | sudo -S systemsetup -setcomputersleep Never
+echo "$root_pass" | sudo -S systemsetup -setdisplaysleep Never
 
 # move launchd on-reboot item into place
 if [ ! -f ~/Library/LaunchAgents/com.macosa.onboot.plist ]; then
