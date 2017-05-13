@@ -7,10 +7,10 @@
     * MacOS 10.12 (Sierra)
 2. See info on how to run the install script:
 ```
-curl https://raw.githubusercontent.com/rockholla/macosa/master/install | bash -s -- -r -h
+bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -h
 ```
-3. Run the install script with whatever xcode install type you want, for example:
+3. Run the install script with whatever xcode install type you want, for example, to install the Xcode app (not just tools):
 ```
-curl https://raw.githubusercontent.com/rockholla/macosa/master/install | bash -s -- -r -x full
+bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -x full
 ```
 4. Follow the prompts and enjoy!
