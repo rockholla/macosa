@@ -6,6 +6,6 @@
 .vaultpass
 .logout
 user
-vars/macosa-generated.yml
+vars/internal.yml
 bin/onboot/*
 !bin/onboot/.keep
