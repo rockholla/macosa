@@ -20,6 +20,7 @@ dock:
     - "/Applications/App Store.app"
     - "/Applications/Launchpad.app"
     - "/Applications/Messages.app"
+    - "/Applications/Safari.app"
     - "/Applications/iTunes.app"
     - "/Applications/System Preferences.app"
   files:
