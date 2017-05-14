@@ -9,7 +9,7 @@
 ```
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -h
 ```
-3. Run the install script with whatever xcode install type you want, for example, to install the full Xcode version 8.3.2 (not just tools):
+3. Run the install script with whatever xcode version you like, for example, to install the full Xcode version 8.3.2 (not just tools):
 ```
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -x 8.3.2
 ```
