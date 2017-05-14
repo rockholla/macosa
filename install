@@ -131,7 +131,7 @@ fi
 ./bin/macosa_xcode $xcode
 
 if [ ! -d ~/.macosa/user ]; then
-  say "Time to initialize your area for customizing My MacOSa"
+  say "Time to initialize your area for customizing My Mac O S A"
   printf "We need to initialize the 'My MacOSa' part of your install.  Please see https://github.com/rockholla/mymacosa for more info.\n"
   read -p "If you have one, please enter the git ssh repo URI where your MacOSa customizations live (if blank, we'll just create a base repo locally for you from https://github.com/rockholla/mymacosa): " mymacosa_repo
   if [ ! -z $mymacosa_repo ]; then
