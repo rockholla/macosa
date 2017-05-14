@@ -31,6 +31,7 @@
 
 - set_fact:
     nvm_stable_version_stripped: "{{ nvm_stable_version.stdout | regex_replace('^(\\[0;[0-9]+m)?.*\\s+', '') | regex_replace('\\[0m', '') }}"
+  when: nvm_install
 
 - name: Compare installed versions of node against ones we want installed
   shell: >
