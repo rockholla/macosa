@@ -2,7 +2,7 @@
 
 update=false
 
-if [ "$1" == "update" ];
+if [ "$1" == "update" ]; then
   update=true
 fi
 
