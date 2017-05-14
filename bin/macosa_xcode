@@ -50,7 +50,7 @@ elif [[ "$install_type" =~ ^[0-9\.]+$ ]]; then
             printf "OK, attempting to download Xcode...\n"
             if ! command -v adcdownload &>/dev/null; then
               source $HOME/.rvm/scripts/rvm
-              gem install adcdownload
+              gem install --no-rdoc --no-ri adcdownload
             fi
             backto=$(pwd)
             cd $root/.downloads/
