@@ -6,15 +6,19 @@ cd "$macosa_bin_dir/../"
 update=false
 logout=false
 passthru=""
+update_macosa=false
 
 function usage () {
    cat <<EOF
 Usage: `basename "$0"` [-h] [-u] [-l]
 
 Options:
-  -h    Show this help
-  -u    Run a MacOS software update before provisioning
-  -l    Logout when finished
+  -h        Show this help
+  -u        Run a MacOS software update before provisioning
+  -l        Logout when finished
+  command:
+    update  When this command is provided, MacOSa will be updated with the most recent 'master' version on github only
+
 
 Other options:
   Anything you can pass to 'ansible-playbook' you can also pass to this script, for example:
@@ -48,6 +52,12 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if $update_macosa; then
+  printf "Updating MacOSa...\n"
+  ./bin/macosa_download "update"
+  exit 0
+fi
 
 # Ask for sudo password and keep alive until this script finishes
 echo $(cat ~/.macosa/.vaultpass) | sudo -S echo "Initializing sudo"

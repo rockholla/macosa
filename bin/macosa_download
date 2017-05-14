@@ -1,0 +1,20 @@
+#!/bin/bash
+
+install=false
+
+if [ "$1" == "install" ];
+  install=true
+fi
+
+cd ~/Downloads
+printf "Downloading MacOSa source files...\n"
+rm -rf ~/Downloads/macosa* &>/dev/null
+rm -rf ~/Downloads/rockholla* &>/dev/null
+rm -rf ~/Downloads/master.zip &>/dev/null
+curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
+unzip master.zip &>/dev/null
+mv rockholla-macosa* macosa
+rm master.zip
+if $install; then
+  rsync --exclude user ~/Downloads/macosa/ ~/.macosa/
+fi
