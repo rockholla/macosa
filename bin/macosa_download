@@ -17,4 +17,5 @@ mv rockholla-macosa* macosa
 rm master.zip
 if $update; then
   rsync -a --exclude user --exclude .vaultpass --exclude .downloads ~/Downloads/macosa/ ~/.macosa/
+  printf "MacOSa update complete\n"
 fi
