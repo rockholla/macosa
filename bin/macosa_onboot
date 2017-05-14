@@ -1,14 +1,13 @@
 #!/bin/bash
-
 macosa_bin_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-for boot_script in $macosa_bin_dir/onboot/*; do
-  if [[ $boot_script == *".keep" ]] || [[ $( basename "$boot_script" ) == "*" ]]; then
-    continue
-  fi
-  echo $boot_script
-  continue
-  cmd=$(cat "$boot_script")
-  osascript -e 'tell application "Terminal" to do script "'"$cmd"'" in front window'
-  rm $boot_script
-done
+logs_dir="$( cd "$macosa_bin_dir/../logs" && pwd )"
+(
+  for boot_script in $macosa_bin_dir/onboot/*; do
+    if [[ $boot_script == *".keep" ]] || [[ $( basename "$boot_script" ) == "*" ]]; then
+      continue
+    fi
+    cmd=$(cat "$boot_script")
+    osascript -e 'tell application "Terminal" to do script "'"$cmd"'" in front window'
+    rm $boot_script
+  done
+) 2>&1 | tee "$logs_dir/macosa.log"
