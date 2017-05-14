@@ -165,3 +165,6 @@ printf "\nRunning local machine provisioning...\n"
 ~/.macosa/bin/macosa $passthru
 
 rm -rf "$install_source"
+
+# TODO: add something to automatically show some help after this last reboot for installation
+./bin/macosa_reboot
