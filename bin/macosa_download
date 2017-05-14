@@ -16,5 +16,5 @@ unzip master.zip &>/dev/null
 mv rockholla-macosa* macosa
 rm master.zip
 if $update; then
-  rsync -r --exclude user ~/Downloads/macosa/ ~/.macosa/
+  rsync -a --exclude user --exclude .vaultpass --exclude .downloads ~/Downloads/macosa/ ~/.macosa/
 fi
