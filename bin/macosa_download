@@ -1,9 +1,9 @@
 #!/bin/bash
 
-install=false
+update=false
 
-if [ "$1" == "install" ];
-  install=true
+if [ "$1" == "update" ];
+  update=true
 fi
 
 cd ~/Downloads
@@ -15,6 +15,6 @@ curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
 unzip master.zip &>/dev/null
 mv rockholla-macosa* macosa
 rm master.zip
-if $install; then
+if $update; then
   rsync --exclude user ~/Downloads/macosa/ ~/.macosa/
 fi

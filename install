@@ -51,14 +51,7 @@ done
 if $remote; then
   cd ~/Downloads
   if [ ! -d macosa ] || [ $fresh == true ]; then
-    printf "Downloading MacOSa source files...\n"
-    rm -rf ~/Downloads/macosa* &>/dev/null
-    rm -rf ~/Downloads/rockholla* &>/dev/null
-    rm -rf ~/Downloads/master.zip &>/dev/null
-    curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
-    unzip master.zip &>/dev/null
-    mv rockholla-macosa* macosa
-    rm master.zip
+    bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/bin/macosa_download) "install"
   fi
   install_source="$(pwd)/macosa"
 else
