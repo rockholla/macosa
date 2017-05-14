@@ -11,6 +11,16 @@
     dest: ~/.bash_profile
     insertbefore: '^.*\.rvm/scripts/rvm.*'
     line: 'eval "$(pyenv init -)"'
+    state: present
+  when: pyenv_install
+
+- name: Ensure pyenv .bash_profile line is not present
+  lineinfile:
+    dest: ~/.bash_profile
+    insertbefore: '^.*\.rvm/scripts/rvm.*'
+    line: 'eval "$(pyenv init -)"'
+    state: absent
+  when: not pyenv_install
 
 - name: Install Python Packages
   pip:
