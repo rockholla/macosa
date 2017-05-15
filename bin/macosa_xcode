@@ -84,10 +84,8 @@ elif [[ "$install_type" =~ ^[0-9\.]+$ ]]; then
       echo $(cat ~/.macosa/.vaultpass) | sudo -S cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
     fi
 
-    notice="You must agree to the Xcode license in order to complete the installation"
-    say "$notice"
-    printf "${notice}...\n"
-    echo $(cat ~/.macosa/.vaultpass) | sudo -S xcrun cc 2>/dev/null
+    printf "Automatically accepting the Xcode license\n"
+    echo $(cat ~/.macosa/.vaultpass) | sudo xcodebuild -license accept 2>/dev/null
 
     # Unmount the installation image
     if mount | grep "on /Volumes/Xcode" &>/dev/null; then
