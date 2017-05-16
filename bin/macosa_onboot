@@ -10,4 +10,4 @@ logs_dir="$( cd "$macosa_bin_dir/../logs" && pwd )"
     osascript -e 'tell application "Terminal" to do script "'"$cmd"'" in front window'
     rm $boot_script
   done
-) 2>&1 | tee "$logs_dir/macosa.log"
+) 2>&1 "$logs_dir/macosa.log"
