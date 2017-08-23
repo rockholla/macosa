@@ -43,6 +43,7 @@ notes:
      date, array and dict).
    - If a chosen key exists with its own structure, then the plist module
      will merge the value specified with it.
+requirements: [ biplist ]
 '''
 
 EXAMPLES = '''
@@ -68,18 +69,24 @@ plist:
 '''
 
 import os
-import plistlib
+
+try:
+    import biplist
+except ImportError:
+    biplist_found = False
+else:
+    biplist_found = True
 
 def do_plist(module, filename, values, backup=False):
     working_values = values
     changed = False
 
     try:
-        f = open(filename, 'rb')
-        plist = plistlib.load(f)
+        f = open(filename)
+        plist = biplist.readPlist(f)
     except IOError:
         plist = {}
-    except plistlib.InvalidFileException:
+    except biplist.InvalidPlistException:
         module.fail_json(msg="an invalid plist already exists")
 
     changed = not equal(plist, working_values)
@@ -93,8 +100,8 @@ def do_plist(module, filename, values, backup=False):
             plist_dir = os.path.dirname(filename)
             if not os.path.exists(plist_dir):
                 os.makedirs(plist_dir)
-            f = open(filename, 'wb')
-            plistlib.dump(plist, f)
+            f = open(filename, 'w')
+            biplist.writePlist(plist, f)
         except Exception as e:
             module.fail_json(msg="Can't change %s" % filename, error=str(e))
 
@@ -102,7 +109,7 @@ def do_plist(module, filename, values, backup=False):
 
 def equal(slave, master):
     if isinstance(slave, dict) and isinstance(master, dict):
-        for key, value in master.items():
+        for key, value in master.iteritems():
             if not equal(slave.get(key), value):
                 return False
     else:
@@ -111,7 +118,7 @@ def equal(slave, master):
     return True
 
 def update(plist, working_values):
-    for key, value in working_values.items():
+    for key, value in working_values.iteritems():
         if isinstance(value, dict):
             plist[key] = update(plist.get(key, {}), value)
         else:
@@ -130,6 +137,9 @@ def main():
         add_file_common_args = True,
         supports_check_mode = True,
     )
+
+    if not biplist_found:
+        module.fail_json(msg="the python biplist module is required")
 
     if (
         not module.params['dest'].startswith('/') and
@@ -161,6 +171,4 @@ def main():
 
 # import module snippets
 from ansible.module_utils.basic import *
-
-if __name__ == '__main__':
-    main()
+main()
