@@ -1,4 +1,4 @@
-![macOSA](https://s3-us-west-2.amazonaws.com/org.rockholla.macosa/macosa.png | width=300)
+<img src="https://s3-us-west-2.amazonaws.com/org.rockholla.macosa/macosa.png" width=300 />
 
 ## Getting Started
 
