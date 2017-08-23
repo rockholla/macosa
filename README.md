@@ -1,4 +1,4 @@
-# MacOSa gives you the power to automate the state of your MacOS or OSX environment
+![macOSA](https://s3-us-west-2.amazonaws.com/org.rockholla.macosa/macosa.png)]
 
 ## Getting Started
 
