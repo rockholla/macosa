@@ -1,9 +1,11 @@
 <img src="https://s3-us-west-2.amazonaws.com/org.rockholla.macosa/macosa.png" width=300 />
 
-## Getting Started
+## Get up and running quickly with a new macOS install the way you want it.  And keep it that way.
+
+### Getting Started
 
 1. Install your operating system, supported versions so far:
-    * OSX 10.11 (El Capitan)
+   ` * OSX 10.11 (El Capitan)
     * MacOS 10.12 (Sierra)
 2. See info on how to run the install script:
 ```
