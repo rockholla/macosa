@@ -64,4 +64,4 @@
 - name: Ensure configured npm packages are installed globally
   shell: >
     source ~/.nvm/nvm.sh; npm install -g {{ item }}
-  with_items: node_npm_global_packages
+  with_items: "{{ node_npm_global_packages }}"
