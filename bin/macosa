@@ -86,9 +86,18 @@ else
   printf "Python is installed via Homebrew.\n"
 fi
 
+# link python to python2 if necessary
+if command -v python2 &>/dev/null; then
+  if [ ! -f /usr/local/bin/python ]; then
+    ln -s $(which python2) /usr/local/bin/python
+  fi
+fi
+
 # link pip to pip2 if pip2 was installed
 if command -v pip2 &>/dev/null; then
-  ln -s $(which pip2) /usr/local/bin/pip
+  if [ ! -f /usr/local/bin/pip ]; then
+    ln -s $(which pip2) /usr/local/bin/pip
+  fi
 fi
 
 # Install python package biplist
