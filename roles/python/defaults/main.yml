@@ -1,4 +1,4 @@
 ---
 
-pyenv_install: no
+pyenv_install: yes
 python_packages: []
