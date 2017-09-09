@@ -63,5 +63,8 @@
 
 - name: Ensure configured npm packages are installed globally
   shell: >
-    source ~/.nvm/nvm.sh; npm install -g {{ item }}
+    source ~/.nvm/nvm.sh; (npm list -g {{ item }} | grep "{{ item }}@") || (npm install -g {{ item }} && echo "macosa-node-global-package-installed")
   with_items: "{{ node_npm_global_packages }}"
+  register: node_npm_global_package_install
+  changed_when: "'macosa-node-global-package-installed' in node_npm_global_package_install.stdout"
+  failed_when: "node_npm_global_package_install.stderr != ''"
