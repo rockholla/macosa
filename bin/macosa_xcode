@@ -57,7 +57,10 @@ elif [[ "$install_type" =~ ^[0-9\.]+$ ]]; then
             message="You may need to enter your Apple account credentials to start the download"
             say "$message"
             printf "$message...\n"
-            adcdownload get http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type
+            if ! adcdownload get http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type; then
+              echo "XCode download failed"
+              exit 1
+            fi
             cd $backto
           )
           ;;
