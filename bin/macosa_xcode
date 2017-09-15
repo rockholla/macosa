@@ -31,10 +31,11 @@ elif [[ "$install_type" =~ ^[0-9\.]+$ ]]; then
   file_basename="Xcode_$xcode_version"
   version_parts=(${xcode_version//./ })
   major_version="${version_parts[0]}"
+  minor_version="${version_parts[1]}"
   if [[ $major_version < "8" ]]; then
     download_file_type="dmg"
   fi
-  if [ $xcode_version == '8.3.2' ]; then
+  if [[ $major_version -ge "8" ]] && [[ $minor_version -ge "3" ]]; then
     file_basename="Xcode$xcode_version"
   fi
 
