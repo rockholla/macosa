@@ -45,6 +45,6 @@
   notify:
     - logout
 
-- { include: dock.yml, tags: [ dock ] }
-- { include: trackpad.yml, tags: [ trackpad ] }
-- { include: menubar.yml, tags: [ menubar ] }
+- { include_tasks: dock.yml, tags: [ dock ] }
+- { include_tasks: trackpad.yml, tags: [ trackpad ] }
+- { include_tasks: menubar.yml, tags: [ menubar ] }

@@ -25,8 +25,10 @@
       tags: [ always ]
 
     - name: Include user-supplied pre tasks
-      include: "{{ item.path }}"
+      include_tasks: "{{ user_pre_task_file.path }}"
       with_items: "{{ user_pre_tasks.files }}"
+      loop_control:
+        loop_var: "user_pre_task_file"
 
   roles:
 
@@ -50,5 +52,7 @@
       tags: [ always ]
 
     - name: Include user-supplied post tasks
-      include: "{{ item.path }}"
+      include_tasks: "{{ user_post_task_file.path }}"
       with_items: "{{ user_post_tasks.files }}"
+      loop_control:
+        loop_var: "user_post_task_file"
