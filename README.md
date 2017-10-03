@@ -11,8 +11,10 @@
 ```
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -h
 ```
-3. Run the install script with whatever xcode version you like, for example, to install the full Xcode version 8.3.2 (not just tools):
+3. See how to customize to fit your needs: https://github.com/rockholla/mymacosa. Fork that repo into your own, make all of the changes you like and push back up to your _public_ fork. MacOSa will ask you for this repo location at install time.
+
+4. Run the install script with whatever xcode version you like, for example, to install the full Xcode version 8.3.2 (not just tools):
 ```
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -x 8.3.2
 ```
-4. Follow the prompts and enjoy!
+5. Follow the prompts and enjoy!
