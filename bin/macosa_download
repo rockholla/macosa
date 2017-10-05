@@ -14,6 +14,7 @@ rm -rf ~/Downloads/master.zip &>/dev/null
 curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
 unzip master.zip &>/dev/null
 mv rockholla-macosa* macosa
+rm -rf macosa/docs
 rm master.zip
 if $update; then
   rsync -a --exclude user --exclude .vaultpass --exclude .downloads ~/Downloads/macosa/ ~/.macosa/
