@@ -15,6 +15,7 @@
 
 </head>
 <body class="impress-not-supported">
+  <div id="play-pause-controls"></div>
   <div class="fallback-message">
     <p>Your browser <b>doesn't support the features required</b> by this presentation.</p>
     <p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
@@ -22,6 +23,7 @@
   <div id="impress">
 
     <div id="spinning-clock" class="step" data-x="0" data-y="0" data-z="0">
+      <audio><source src="audio/spinning-clock.mp3"></source></audio>
       <article class="clock simple">
         <div class="hours-container">
           <div class="hours"></div>
@@ -36,6 +38,7 @@
     </div>
 
     <div id="packages" class="step hide" data-x="0" data-y="0" data-z="-3000" data-rotate="30">
+      <audio><source src="audio/packages.mp3"></source></audio>
       <h3 class="heading">So much to install manually</h3>
       <img class="first" src="img/pkg.png" />
       <img class="second" src="img/pkg.png" />
@@ -43,6 +46,7 @@
     </div>
 
     <div id="configuration" class="step hide" data-x="0" data-y="0" data-z="-6000" data-rotate="60">
+      <audio><source src="audio/configuration.mp3"></source></audio>
       <img class="gears" src="img/settings-gears.png" />
       <img class="wifi" src="img/settings-wifi-screen.jpg" />
       <img class="prefs" src="img/settings-prefs.jpg" />
@@ -50,49 +54,62 @@
     </div>
 
     <div id="title" class="title step" data-x="4000" data-y="0" data-z="0" data-rotate="180">
+      <audio><source src="audio/title.mp3"></source></audio>
       <img src="img/macos.png" />
       <img class="a" src="img/a.png" />
       <h3 class="condensed">Get up and running quickly with a new macOS install the way you want it. And keep it that way.</h3>
     </div>
 
     <div id="for-developers-1" class="step for-developers" data-x="8000" data-y="0" data-z="0">
+      <audio><source src="audio/for-developers-1.mp3"></source></audio>
       <div class="htmltag">&lt;/&gt;</div>
       <h4 class="heading">Made first for developers and other IT staff</h4>
     </div>
     <div id="for-developers-2" class="step for-developers hide" data-x="8000" data-y="200" data-z="200">
+      <audio><source src="audio/for-developers-2.mp3"></source></audio>
       <code>$ macosa</code>
       <code>$ macosa -u -l --tags=system</code>
     </div>
     <div id="for-developers-3" class="step for-developers hide" data-x="8000" data-y="400" data-z="300">
+      <audio><source src="audio/for-developers-3.mp3"></source></audio>
       <img src="img/yaml.png" />
     </div>
 
     <div id="out-of-the-box-1" class="step out-of-the-box" data-x="8000" data-y="2000" data-z="1000">
+      <audio><source src="audio/out-of-the-box-1.mp3"></source></audio>
       <img class="box" src="img/open-box.png" />
     </div>
     <div id="out-of-the-box-2" class="step out-of-the-box contents aws" data-x="8000" data-y="2000" data-z="1000">
+      <audio><source src="audio/out-of-the-box-2.mp3"></source></audio>
       <img src="img/aws.png" />
     </div>
     <div id="out-of-the-box-3" class="step out-of-the-box contents homebrew" data-x="8000" data-y="2000" data-z="1000">
+      <audio><source src="audio/out-of-the-box-3.mp3"></source></audio>
       <img src="img/homebrew.png" />
     </div>
     <div id="out-of-the-box-4" class="step out-of-the-box contents node" data-x="8000" data-y="2000" data-z="1000">
+      <audio><source src="audio/out-of-the-box-4.mp3"></source></audio>
       <img src="img/node.png" />
     </div>
     <div id="out-of-the-box-5" class="step out-of-the-box contents python" data-x="8000" data-y="2000" data-z="1000">
+      <audio><source src="audio/out-of-the-box-5.mp3"></source></audio>
       <img src="img/python.png" />
     </div>
     <div id="out-of-the-box-6" class="step out-of-the-box contents rvm" data-x="8000" data-y="2000" data-z="1000">
+      <audio><source src="audio/out-of-the-box-6.mp3"></source></audio>
       <img src="img/rvm.png" />
     </div>
 
     <div id="how-to-1" class="step how-to hide-future" data-x="10000" data-y="2000" data-z="0" data-rotate="180">
+      <audio><source src="audio/how-to-1.mp3"></source></audio>
       <h1 class="heading">Installing macOSa</h1>
     </div>
     <div id="how-to-2" class="step how-to hide-future" data-x="10000" data-y="2100" data-z="0" data-rotate="180">
+      <audio><source src="audio/how-to-2.mp3"></source></audio>
       <div class="typed-code">bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r</div>
     </div>
     <div id="how-to-3" class="step hide how-to" data-x="10000" data-y="2200" data-z="0" data-rotate="180">
+      <audio><source src="audio/how-to-3.mp3"></source></audio>
       <pre>
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
@@ -325,6 +342,7 @@ Xcode tools are already installed
       </pre>
     </div>
     <div id="how-to-4" class="step hide how-to" data-x="10000" data-y="-1000" data-z="0" data-rotate="180">
+      <audio><source src="audio/how-to-4.mp3"></source></audio>
       <pre>
 We need to initialize the 'My MacOSa' part of your install.  Please see https://github.com/rockholla/mymacosa for more info.
 If you have one, please enter the git ssh repo URI where your MacOSa customizations live (if blank, we'll just create a base repo locally for you from https://github.com/rockholla/mymacosa):
@@ -745,48 +763,65 @@ localhost                  : ok=35   changed=16   unreachable=0    failed=0
       </pre>
     </div>
     <div id="how-to-5" class="step hide how-to" data-x="10000" data-y="-4000" data-z="0" data-rotate="180">
+      <audio data-play-after="how-to-5-say"><source src="audio/how-to-5.mp3"></source></audio>
+      <audio id="how-to-5-say" data-play-after="how-to-5-no-babysitting"><source src="audio/say.mp3"></source></audio>
+      <audio id="how-to-5-no-babysitting"><source src="audio/no-babysitting.mp3"></source></audio>
       <div><img src="img/macbook.png" /><img src="img/megaphone.png" /></div>
-      <audio><source src="audio/audible-prompt.mp3"></source></audio>
     </div>
 
     <div id="customize-1" class="step customize" data-x="10000" data-y="-4000" data-z="1000">
+      <audio><source src="audio/customize-1.mp3"></source></audio>
       <h1 class="heading">Writing your own instructions</h1>
     </div>
     <div id="customize-2" class="step customize hide-future" data-x="10000" data-y="-3990" data-z="1000">
+      <audio><source src="audio/customize-2.mp3"></source></audio>
       <p><a href="https://github.com/rockholla/mymacosa">https://github.com/rockholla/mymacosa</a></p>
     </div>
     <div id="customize-3" class="step customize hide-future" data-x="10000" data-y="-3880" data-z="1000">
+      <audio><source src="audio/customize-3.mp3"></source></audio>
       <div class="arrow-down"></div>
-      <div><a href="https://github.com/yourorganization/yourmacosa">https://github.com/yourorganization/yourmacosa</a></div>
+      <div><a href="https://github.com/yourusername/yourmacosa">https://github.com/yourusername/yourmacosa</a></div>
     </div>
     <div id="customize-4" class="step customize hide-future" data-x="10000" data-y="-3880" data-z="3000">
+      <audio><source src="audio/customize-4.mp3"></source></audio>
       <img src="img/mymacosa.png" />
     </div>
 
+    <div id="maintain-0" class="step maintain" data-x="20000" data-y="-3680" data-z="3000">
+      <audio><source src="audio/maintain-0.mp3"></source></audio>
+    </div>
     <div id="maintain-1" class="step maintain" data-x="20000" data-y="-3680" data-z="3000">
+      <audio><source src="audio/maintain-1.mp3"></source></audio>
       <div class="typed-code">macosa</div>
     </div>
     <div id="maintain-2" class="step maintain" data-x="20000" data-y="-3680" data-z="3000">
+      <audio><source src="audio/maintain-2.mp3"></source></audio>
       <div class="typed-code">macosa --tags=homebrew</div>
     </div>
 
     <div id="closing-1" class="step closing" data-x="18000" data-y="4000" data-z="500">
+      <audio><source src="audio/closing-1.mp3"></source></audio>
       <p>?</p>
     </div>
     <div id="closing-2" class="step closing hide" data-x="18000" data-y="4000" data-z="-1000">
+      <audio><source src="audio/closing-2.mp3"></source></audio>
       <img src="img/overworked.jpeg" />
     </div>
     <div id="closing-3" class="step closing hide" data-x="18000" data-y="4000" data-z="-5000">
+      <audio><source src="audio/closing-3.mp3"></source></audio>
       <img src="img/reading.jpg" />
     </div>
     <div id="closing-4" class="step closing hide" data-x="18000" data-y="4000" data-z="-8000">
+      <audio><source src="audio/closing-4.mp3"></source></audio>
       <img src="img/camping.jpg" />
     </div>
     <div id="closing-5" class="step closing hide" data-x="18000" data-y="4000" data-z="-10000">
+      <audio><source src="audio/closing-5.mp3"></source></audio>
       <img src="img/louis2.jpg" />
     </div>
 
     <div id="title-end" class="title step" data-x="12000" data-y="4000" data-z="0">
+      <audio id="title-end-audio"><source src="audio/title-end.mp3"></source></audio>
       <img src="img/macos.png" />
       <img class="a" src="img/a.png" />
       <h3 class="condensed">Get up and running quickly with a new macOS install the way you want it. And keep it that way.</h3>
@@ -794,7 +829,7 @@ localhost                  : ok=35   changed=16   unreachable=0    failed=0
 
   </div>
   <script src="impress.js"></script>
-  <script>impress().init();</script>
+  <script>impress().init(); window.impressApi = impress();</script>
   <script type="text/javascript" src="main.js"></script>
 </body>
 </html>

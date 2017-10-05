@@ -513,3 +513,20 @@ a:focus {
 .closing img {
   box-shadow: 5px 10px 18px #333;
 }
+
+#play-pause-controls {
+  opacity: 0.9;
+  background-image: url(img/controls.png);
+  background-position: 0px 0px;
+  cursor: pointer;
+  background-repeat: no-repeat;
+  width: 80px;
+  height: 80px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  color: #fff;
+}
+#play-pause-controls:hover {
+  opacity: 1;
+}

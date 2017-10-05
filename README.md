@@ -4,16 +4,17 @@
 
 ### Getting Started
 
-1. Install your operating system, supported versions so far:
-   * OSX 10.11 (El Capitan)
-    * MacOS 10.12 (Sierra)
-2. See info on how to run the install script:
+1. Before you do anything, you should check out [this short presentation on macOSa](https://rockholla.github.io/macosa/)
+2. Install your operating system, supported versions so far:
+  * OSX 10.11 (El Capitan)
+  * macOS 10.12 (Sierra)
+3. See info on how to run the install script:
 ```
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -h
 ```
-3. See how to customize to fit your needs: https://github.com/rockholla/mymacosa. Fork that repo into your own, make all of the changes you like and push back up to your _public_ fork. MacOSa will ask you for this repo location at install time. If you'd like a jumpstart with how to write your customizations, feel free to check out the [customizations I built and use](https://github.com/rockholla/mymacosa-personal).
+4. Check out how to customize to fit your needs: https://github.com/rockholla/mymacosa. Fork that repo into your own, make all of the changes you like and push back up to your _public_ fork. MacOSa will ask you for this repo location at install time. If you'd like a jumpstart with how to write your customizations, feel free to check out the [customizations I built and use](https://github.com/rockholla/mymacosa-personal).
 
-4. When you're ready to install, run the following:
+5. When you're ready to install, run the following:
 ```
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r
 ```
@@ -23,4 +24,10 @@ or if you'd like to install the full Xcode app/suite (not just tools):
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -x full
 ```
 
-5. Follow the prompts and enjoy!
+6. Follow the prompts and enjoy!
+
+### Other Helpful Info
+
+macOSa is currently designed for new installs only. There might be a time where you could install it on an already-running and configured install of macOS.
+
+We welcome you to [submit issues](https://github.com/rockholla/macosa/issues) or [pull requests](https://github.com/rockholla/macosa/pulls). You can of course take what's available here and run with it on your own, but remember that submitting useful things back to the community is important and what this project is all about.
