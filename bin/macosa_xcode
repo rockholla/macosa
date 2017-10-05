@@ -74,7 +74,7 @@ elif [[ "$install_type" == "full" ]]; then
       done
     fi
     printf "Installing extracted Xcode.app to Applications...\n"
-    echo $(cat ~/.macosa/.vaultpass) | sudo -S rsync -a /tmp/Xcode.app/ /Applications/Xcode.app
+    echo $(cat ~/.macosa/.vaultpass) | sudo -S rsync -a --progress /tmp/Xcode.app/ /Applications/Xcode.app
     rm "/tmp/$xcode_download_filename"
 
     printf "Automatically accepting the Xcode license\n"
