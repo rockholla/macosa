@@ -1,4 +1,4 @@
-<img src="https://s3-us-west-2.amazonaws.com/org.rockholla.macosa/macosa.png" width=300 />
+<a href="https://rockholla.github.io/macosa/"><img src="https://s3-us-west-2.amazonaws.com/org.rockholla.macosa/macosa.png" width=300 /></a>
 
 ## Get up and running quickly with a new macOS install the way you want it.  And keep it that way.
 
