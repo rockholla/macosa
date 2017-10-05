@@ -1,0 +1,23 @@
+---
+
+- name: Get the last line of .bash_profile
+  shell: >
+    tail -1 /Users/{{ ansible_user_id }}/.bash_profile
+  register: bash_profile_last_line
+  changed_when: false
+
+- name: Ensure we remove an existing rvm sourcing from .bash_profile b/c it's not in the right spot
+  lineinfile:
+    dest: "/Users/{{ ansible_user_id }}/.bash_profile"
+    line: "source ~/.rvm_profile"
+    state: absent
+  register: bash_profile_sourcing_line
+  when: "bash_profile_last_line.stdout != 'source ~/.rvm_profile'"
+
+- name: Insert rvm sourcing line at the end of .bash_profile
+  lineinfile:
+    dest: "/Users/{{ ansible_user_id }}/.bash_profile"
+    line: "source ~/.rvm_profile"
+    state: present
+    insertafter: EOF
+  when: "bash_profile_last_line.stdout != 'source ~/.rvm_profile'"

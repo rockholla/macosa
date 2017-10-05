@@ -30,6 +30,13 @@
       loop_control:
         loop_var: "user_pre_task_file"
 
+    - name: Ensure an initial .bash_profile is present
+      lineinfile:
+        dest: "/Users/{{ ansible_user_id }}/.bash_profile"
+        create: yes
+        line: "# MacOSa manages a good deal of this file, you probably don't want to edit in here directly"
+        insertbefore: BOF
+
   roles:
 
     - { role: homebrew, when: "'homebrew' in include_macosa_roles", tags: [ homebrew ] }
@@ -56,3 +63,10 @@
       with_items: "{{ user_post_tasks.files }}"
       loop_control:
         loop_var: "user_post_task_file"
+
+    - include_role:
+        name: ruby
+      vars:
+        ruby_maintain_profile_sourcing: true
+      when: "'ruby' in include_macosa_roles"
+      tags: [ ruby ]

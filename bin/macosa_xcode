@@ -3,11 +3,10 @@
 # Install Xcode or Xcode cli tools
 
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-root="$this_dir/.."
+downloads_directory="$( cd "$this_dir/../.downloads" && pwd )"
 install_type="${1:-tools}"
-download_file_type="xip"
 
-if [ $install_type == "tools" ]; then
+if [[ $install_type == "tools" ]]; then
 
   if ! xcode-select --print-path &>/dev/null; then
     printf "Installing Xcode tools...\n"
@@ -25,76 +24,62 @@ if [ $install_type == "tools" ]; then
     printf "Xcode tools are already installed\n"
   fi
 
-elif [[ "$install_type" =~ ^[0-9\.]+$ ]]; then
-
-  xcode_version="$install_type"
-  file_basename="Xcode_$xcode_version"
-  version_parts=(${xcode_version//./ })
-  major_version="${version_parts[0]}"
-  minor_version="${version_parts[1]}"
-  if [[ $major_version < "8" ]]; then
-    download_file_type="dmg"
-  fi
-  if [[ $major_version -ge "8" ]] && [[ $minor_version -ge "3" ]]; then
-    file_basename="Xcode$xcode_version"
-  fi
+elif [[ "$install_type" == "full" ]]; then
 
   # Mount and install
   if [ ! -d /Applications/Xcode.app ]; then
+    say "You have selected to install the full Xcode application. We can help you download and install it automatically, please reed the following and respond to continue"
+    read -rp $'\033[33mWe can try to download Xcode for you automatically, but you need to make sure you don\'t have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources. Once you do so, we can start the download and install. Do you want to continue? [Y/n] \033[0m' response
+    case "$response" in
+      [yY][eE][sS]|[yY])
+        (
+          continue=false
+          until $continue; do
+            read -p "What version of Xcode would you like to install? (must be greater than version 8, enter a value like '8.3.3' or '9') " xcode_version
+            printf "You'll need to input your Apple ID and password in order to authenticate to the Apple Download Center:\n"
+            read -p "Your Apple ID: " apple_id
+            read -s -p "Your Apple ID password: " apple_id_password
+            printf "\nDownloading Xcode...\n"
+            if $this_dir/macosa_xcode_download "$apple_id" "$apple_id_password" "$xcode_version" "$downloads_directory"; then
+              continue=true
+            else
+              say "There was a problem downloading Xcode automatically, you should see the error here. Let us know how you would like to continue"
+              read -rp $'\033[31mThere was a problem downloading Xcode automatically, would you like to try again (if this is simply a network issue, the download will pick up where it left off)? [Y/n] \033[0m' try_again
+              case "$try_again" in
+                [yY][eE][sS]|[yY])
+                  continue=false
+                  ;;
+                *)
+                  printf "\033[33mOK, moving on despite the failure. It shouldn't cause any issues for the rest of the MacOSa install process. You can download/install it yourself at any time by heading to the download center at https://developer.apple.com/download/more/\033[0m\n"
+                  continue=true
+              esac
+            fi
+          done
+        )
+        ;;
+      *)
+        printf "\033[33mOK, not downloading/installling Xcode automatically. It shouldn't cause any issues for the rest of the MacOSa install process. You can download/install it yourself at any time by heading to the download center at https://developer.apple.com/download/more/\033[0m\n"
+        ;;
+    esac
+
     printf "Installing Xcode...\n"
-    if [ ! -f "$root/.downloads/$file_basename.$download_file_type" ]; then
-      say "We can help you download Xcode automatically, please reed the following and respond to continue"
-      read -rp $'We can try to download Xcode for you automatically, but you need to make sure you don\'t have two-factor authentication turned on for your Apple ID (https://appleid.apple.com/account/manage) and have access to Apple Developer resources.  Would you like to download Xcode automatically? [Y/n] ' response
-      case "$response" in
-        [yY][eE][sS]|[yY])
-          (
-            printf "OK, attempting to download Xcode...\n"
-            if ! command -v adcdownload &>/dev/null; then
-              source $HOME/.rvm/scripts/rvm
-              gem install --no-rdoc --no-ri adcdownload
-            fi
-            backto=$(pwd)
-            cd $root/.downloads/
-            message="You may need to enter your Apple account credentials to start the download"
-            say "$message"
-            printf "$message...\n"
-            if ! adcdownload get http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type; then
-              echo "XCode download failed"
-              exit 1
-            fi
-            cd $backto
-          )
-          ;;
-        *)
-          read -rsp $'Please download Xcode from http://adcdownload.apple.com/Developer_Tools/Xcode_$xcode_version/$file_basename.$download_file_type.  Move the downloaded file to ~/.macosa/.downloads/, then press any key continue.\n' -n1 key
-          ;;
-      esac
+
+    if [ ! -s /tmp/Xcode.app ]; then
+      xcode_download_filename=$(cat $this_dir/.tmp/xcode_download_filename)
+      rsync "$downloads_directory/$xcode_download_filename" /tmp/
+      open "/tmp/$xcode_download_filename"
+      printf "Waiting for Xcode xip to be extracted...\n"
+      until [ -s /tmp/Xcode.app ]; do
+        sleep 5
+      done
     fi
-    if [ $download_file_type == 'xip' ]; then
-      if [ ! -s /tmp/Xcode.app ]; then
-        rsync "$root/.downloads/$file_basename.$download_file_type" /tmp/
-        open "/tmp/$file_basename.$download_file_type"
-        printf "Waiting for Xcode xip to be extracted...\n"
-        until [ -s /tmp/Xcode.app ]; do
-          sleep 5
-        done
-      fi
-      printf "Installing extracted Xcode.app to Applications...\n"
-      echo $(cat ~/.macosa/.vaultpass) | sudo -S rsync -a /tmp/Xcode.app/ /Applications/Xcode.app
-      rm "/tmp/$file_basename.$download_file_type"
-    else
-      echo $(cat ~/.macosa/.vaultpass) | sudo -S hdiutil attach "$root/.downloads/$file_basename.$download_file_type"
-      printf "Installing Xcode from mount to Applications...\n"
-      echo $(cat ~/.macosa/.vaultpass) | sudo -S cp -R /Volumes/Xcode/Xcode.app /Applications/Xcode.app
-    fi
+    printf "Installing extracted Xcode.app to Applications...\n"
+    echo $(cat ~/.macosa/.vaultpass) | sudo -S rsync -a /tmp/Xcode.app/ /Applications/Xcode.app
+    rm "/tmp/$xcode_download_filename"
 
     printf "Automatically accepting the Xcode license\n"
     echo $(cat ~/.macosa/.vaultpass) | sudo -S xcodebuild -license accept 2>/dev/null
 
-    # Unmount the installation image
-    if mount | grep "on /Volumes/Xcode" &>/dev/null; then
-      echo $(cat ~/.macosa/.vaultpass) | sudo -S hdiutil unmount "/Volumes/Xcode"
-    fi
     printf "Xcode is finished installing.\n"
   else
     printf "Xcode application is already installed\n"

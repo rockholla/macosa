@@ -7,7 +7,9 @@
 .logout
 user
 vars/internal.yml
-bin/onboot/*
-!bin/onboot/.keep
 logs/*
 !logs/.keep
+
+bin/onboot/*
+!bin/onboot/.keep
+bin/.tmp

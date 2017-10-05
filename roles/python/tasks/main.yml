@@ -6,19 +6,23 @@
     state: present
   when: pyenv_install
 
-- name: Ensure pyenv .bash_profile line is present
-  lineinfile:
-    dest: ~/.bash_profile
-    insertbefore: '^.*\.rvm/scripts/rvm.*'
-    line: 'eval "$(pyenv init -)"'
+- name: Ensure pyenv .bash_profile block is present
+  blockinfile:
+    marker: "# {mark} MacOSa managed block pyenv"
+    dest: "/Users/{{ ansible_user_id }}/.bash_profile"
+    create: yes
+    block: |
+      eval "$(pyenv init -)"
     state: present
   when: pyenv_install
 
-- name: Ensure pyenv .bash_profile line is not present
-  lineinfile:
-    dest: ~/.bash_profile
-    insertbefore: '^.*\.rvm/scripts/rvm.*'
-    line: 'eval "$(pyenv init -)"'
+- name: Ensure pyenv .bash_profile block is not present
+  blockinfile:
+    marker: "# {mark} MacOSa managed block pyenv"
+    dest: "/Users/{{ ansible_user_id }}/.bash_profile"
+    create: yes
+    block: |
+      eval "$(pyenv init -)"
     state: absent
   when: not pyenv_install
 

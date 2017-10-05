@@ -1,0 +1,119 @@
+#!/bin/bash
+
+set -e
+
+MINIMUM_MAJOR_VERSION="8"
+this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+current_directory=$(pwd)
+
+mkdir -p "$this_dir/.tmp"
+
+apple_id="$1"
+apple_id_password="$2"
+xcode_version="$3"
+download_to="$4"
+
+if [ -z "$apple_id" ] || [ -z "$apple_id_password" ] || [ -z "$xcode_version" ] || [ -z "$download_to" ]; then
+  printf "\033[31mError: argument(s) missing\033[0m\n"
+  printf "Usage: macosa_xcode_download [Apple ID] [Apple ID password] [Xcode version] [Download to directory/path]\n"
+  exit 1
+fi
+
+version_parts=(${xcode_version//./ })
+major_version="${version_parts[0]}"
+minor_version="${version_parts[1]:-0}"
+patch_version="${version_parts[2]:-0}"
+
+if (( $major_version < "$MINIMUM_MAJOR_VERSION" )); then
+  printf "\033[31mError: only Xcode version $MINIMUM_MAJOR_VERSION and above can be downloaded using this utility\033[0m\n"
+  exit 1
+fi
+if [[ $xcode_version == "8.3.3" || $xcode_version == "8.3.2" ]]; then
+  download_file_name="Xcode${xcode_version}.xip"
+else
+  download_file_name="Xcode_${xcode_version}.xip"
+fi
+download_directory="Xcode_${xcode_version}"
+download_uri="https://developer.apple.com/services-account/download?path=/Developer_Tools/${download_directory}/${download_file_name}"
+
+initial_uri="https://developer.apple.com/download/"
+os_version=$(sw_vers | grep ^ProductVersion | awk '{print $2}')
+user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X ${os_version}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
+
+authenticate_uri="https://idmsa.apple.com/IDMSWebAuth/authenticate"
+
+curl -v -s -L \
+     -D "$this_dir/.tmp/initial_headers" \
+     --cookie-jar "$this_dir/.tmp/cookies" -A "$user_agent" "$initial_uri" &> "$this_dir/.tmp/initial_response"
+
+login_uri=$(cat "$this_dir/.tmp/initial_headers" | grep "^Location:" | awk '{print $2}')
+
+post_data=""
+while read -r line; do
+  if [ -z "$name" ]; then
+    name=$(echo "$line" | perl -n -e '/name="([^"]+)"/ && print $1')
+  fi
+  value=$(echo "$line" | perl -n -e '/value="([^"]+)"/ && print $1')
+  if [ ! -z "$name" ] && [ ! -z "$value" ]; then
+    if [ ! -z "$post_data" ]; then
+      post_data+="&"
+    fi
+    post_data+="${name}=${value}"
+    name=""
+    value=""
+  fi
+done < <(cat "$this_dir/.tmp/initial_response" | awk '/<input/,/>/')
+
+post_data="$post_data&referer=$initial_uri"
+post_data="$post_data&appleId=$apple_id"
+post_data="$post_data&accountPassword=$apple_id_password"
+
+post_data_length=${#post_data}
+
+printf "Attempting authentication to apple.com...\n"
+curl -s --compressed \
+  --cookie-jar "$this_dir/.tmp/cookies" --cookie "$this_dir/.tmp/cookies" \
+  -D "$this_dir/.tmp/login_headers" \
+  -A "$user_agent" \
+  -H 'Accepting: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8' \
+  -H 'Accept-Encoding: gzip, deflate, br' \
+  -H 'Accept-Language: en-US,en;q=0.8' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -H 'Content-Length: '"$post_data_length"'' \
+  -H 'Origin: https://idmsa.apple.com' \
+  -H 'Referer: '"$login_uri"'' \
+  -H 'Upgrade-Insecure-Requests: 1' \
+  -X POST "$authenticate_uri" \
+  --data "$post_data" > "$this_dir/.tmp/login_response"
+
+if ! cat "$this_dir/.tmp/login_headers" | grep "^HTTP/1.1 302" &> /dev/null; then
+  printf "\033[31mError authenticating to apple.com\033[0m\n"
+  exit 1
+fi
+
+printf "\033[32mAuthenticated, moving on to Xcode download from $download_uri...\033[0m\n"
+cd "$download_to" &> /dev/null
+set +e
+curl -L \
+     --cookie-jar "$this_dir/.tmp/cookies" --cookie "$this_dir/.tmp/cookies" \
+     -D "$this_dir/.tmp/download_headers" \
+     -A "$user_agent" \
+     -C - \
+     -O "$download_uri"
+set -e
+if cat "$this_dir/.tmp/download_headers" | grep "HTTP/1.1 416 Requested Range Not Satisfiable" &> /dev/null; then
+  printf "\033[32mDon't worry about this message ↑, just means that the downloaded file was already complete\033[0m\n"
+fi
+
+if ! cat "$this_dir/.tmp/download_headers" | grep "HTTP/1.1 206 Partial Content\|HTTP/1.1 200 OK\|HTTP/1.1 416 Requested Range Not Satisfiable" &> /dev/null; then
+  printf "\n\033[31mError: Unable to download $download_uri\n"
+  printf "       This most likely this means that the Xcode version $xcode_version is simply not available at that URL\033[0m\n\n"
+  rm "$download_file_name"
+  exit 1
+fi
+cd "$current_directory" &> /dev/null
+
+echo "$download_file_name" > "$this_dir/.tmp/xcode_download_filename"
+
+exit 0

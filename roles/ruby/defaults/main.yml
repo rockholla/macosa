@@ -4,3 +4,4 @@ rvm_install: yes
 ruby_versions:
   - stable
 ruby_default_version: stable
+ruby_maintain_profile_sourcing: false

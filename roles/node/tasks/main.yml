@@ -2,29 +2,24 @@
 
 - name: Check to see if nvm is installed
   stat:
-    path: "~/.nvm/nvm.sh"
+    path: "/Users/{{ ansible_user_id }}/.nvm/nvm.sh"
   register: nvm_path
   changed_when: false
-
-- name: Ensure nvm initialization line is present in .bash_profile
-  lineinfile:
-    dest: ~/.bash_profile
-    insertafter: '# END MacOSa managed block'
-    line: 'export NVM_DIR="$HOME/.nvm"; [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
 
 - name: Install nvm
   shell: >
     \curl -sSL https://raw.githubusercontent.com/creationix/nvm/{{ nvm_version }}/install.sh | bash -s
   when: "nvm_install and (not nvm_path.stat.exists)"
+  register: nvm_install_exec
 
 - name: Make sure at least the most recent stable version of node is installed using nvm
   shell: >
-    source ~/.nvm/nvm.sh; nvm install stable
+    . /Users/{{ ansible_user_id }}/.nvm/nvm.sh && nvm install stable
   when: "nvm_install and (not nvm_path.stat.exists)"
 
 - name: Get the stable version
   shell: >
-    source ~/.nvm/nvm.sh; nvm ls stable | tr -d '[:cntrl:]'
+    . /Users/{{ ansible_user_id }}/.nvm/nvm.sh && nvm ls stable | tr -d '[:cntrl:]'
   register: nvm_stable_version
   when: nvm_install
   changed_when: false
@@ -35,7 +30,7 @@
 
 - name: Compare installed versions of node against ones we want installed
   shell: >
-    source ~/.nvm/nvm.sh; nvm ls | grep -E "(\->)?\s+(v)?{{ (nvm_stable_version_stripped if item == 'stable' else item) }}" | cat
+    . /Users/{{ ansible_user_id }}/.nvm/nvm.sh && nvm ls | grep -E "(\->)?\s+(v)?{{ (nvm_stable_version_stripped if item == 'stable' else item) }}" | cat
   register: nvm_node_versions_check
   with_items: "{{ node_versions }}"
   when: nvm_install
@@ -43,28 +38,28 @@
 
 - name: Install node versions
   shell: >
-    source ~/.nvm/nvm.sh; nvm install {{ item.item }}
+    . /Users/{{ ansible_user_id }}/.nvm/nvm.sh && nvm install {{ item.item }}
   register: nvm_node_install
   with_items: "{{ nvm_node_versions_check.results }}"
   when: "nvm_install and (item.stdout == '')"
 
 - name: Get current node version being used
   shell: >
-    source ~/.nvm/nvm.sh; nvm current
+    . /Users/{{ ansible_user_id }}/.nvm/nvm.sh && nvm current
   changed_when: false
   register: nvm_current_node_version
   when: nvm_install
 
-# TODO: nvm use <version> does not work in updating the current session running this provisioning, so we're just leaving it out, accepting that the next terminal session opened will use the new default
+# NOTE: maybe TODO, the use part of this doesn't actually work for the current session running this, requires opening a new terminal window
 - name: Set default node version
   shell: >
-    source ~/.nvm/nvm.sh; nvm alias default {{ node_default_version }}
+    . /Users/{{ ansible_user_id }}/.nvm/nvm.sh && nvm alias default {{ node_default_version }}
   when: "nvm_install and (node_default_version != None) and (nvm_current_node_version.stdout != (nvm_stable_version_stripped if node_default_version == 'stable' else (node_default_version | regex_replace('^([0-9].*)', 'v\\1'))))"
 
 - name: Ensure configured npm packages are installed globally
   shell: >
-    source ~/.nvm/nvm.sh; (npm list -g {{ item }} | grep "{{ item }}@") || (npm install -g {{ item }} && echo "macosa-node-global-package-installed")
+    . /Users/{{ ansible_user_id }}/.nvm/nvm.sh && ((npm list -g | grep " {{ ('@' in item) | ternary(item,item + '@*') }}") || (npm install -g {{ item }} && echo "macosa-node-global-package-installed"))
   with_items: "{{ node_npm_global_packages }}"
   register: node_npm_global_package_install
   changed_when: "'macosa-node-global-package-installed' in node_npm_global_package_install.stdout"
-  failed_when: "node_npm_global_package_install.stderr != ''"
+  failed_when: "'npm ERR!' in node_npm_global_package_install.stderr"

@@ -75,8 +75,6 @@ if $update; then
   ./bin/macosa_softwareupdate
 fi
 
-./bin/macosa_ruby
-
 # Install Python
 
 if ! brew ls --versions python &>/dev/null; then
@@ -93,10 +91,24 @@ if command -v python2 &>/dev/null; then
   fi
 fi
 
+# link python to python3 if necessary
+if command -v python3 &>/dev/null; then
+  if [ ! -f /usr/local/bin/python ]; then
+    ln -s $(which python3) /usr/local/bin/python
+  fi
+fi
+
 # link pip to pip2 if pip2 was installed
 if command -v pip2 &>/dev/null; then
   if [ ! -f /usr/local/bin/pip ]; then
     ln -s $(which pip2) /usr/local/bin/pip
+  fi
+fi
+
+# link pip to pip3 if pip3 was installed
+if command -v pip3 &>/dev/null; then
+  if [ ! -f /usr/local/bin/pip ]; then
+    ln -s $(which pip3) /usr/local/bin/pip
   fi
 fi
 
@@ -142,5 +154,5 @@ if [ -f .logout ] || [ $logout == true ]; then
   ./bin/macosa_logout
   rm .logout
 else
-  exec bash ~/.bash_profile
+  printf "\n\033[33mNOTE: You may need to re-source your .bash_profile ( . ~/.bash_profile) or in certain cases close and reopen your terminal for changes to take effect\033[0m\n\n"
 fi

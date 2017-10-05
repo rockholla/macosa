@@ -1,24 +1,30 @@
 ---
 
-- name: Make sure .bash_profile is setup
-  lineinfile:
-    dest: ~/.bash_profile
+- name: Make sure .bash_profile is set up
+  blockinfile:
+    marker: "# {mark} MacOSa managed block bash_profile_init"
+    dest: "/Users/{{ ansible_user_id }}/.bash_profile"
     create: yes
-    line: "{{ item }}"
+    block: |
+      [[ -s ~/.bash_aliases ]] && source ~/.bash_aliases
+      if [ -x /usr/libexec/path_helper ]; then eval `/usr/libexec/path_helper -s`; fi
+      if [[ ":$PATH:" != *":/usr/local/bin:"* ]]; then
+        export PATH=/usr/local/bin:$PATH
+      fi
+      if [[ ":$PATH:" != *":/usr/local/sbin:"* ]]; then
+        export PATH=/usr/local/sbin:$PATH
+      fi
+      export PATH=/Users/{{ ansible_user_id }}/.macosa/bin:/Users/{{ ansible_user_id }}/.macosa/user/bin:$PATH
     insertbefore: BOF
-  with_items:
-    - "[[ -s ~/.profile ]] && source ~/.profile"
-    - "[[ -s ~/.bash_aliases ]] && source ~/.bash_aliases"
-    - "export PATH=/usr/local/bin:/usr/local/sbin:~/.macosa/bin:~/.macosa/user/bin:$PATH"
   tags: [ dotfiles ]
 
 - name: Copy dotfile blocks to ~/
   blockinfile:
-    marker: "# {mark} MacOSa managed block"
-    dest: "~/{{ item.split('/')[-1] }}"
+    marker: "# {mark} MacOSa managed block user"
+    dest: "/Users/{{ ansible_user_id }}/{{ item.split('/')[-1] }}"
     create: yes
     block: "{{ lookup('file', item) }}"
-    insertbefore: BOF
+    insertafter: '# END MacOSa managed block bash_profile_init'
   when: "(item.split('/')[-1] != '.keep')"
   with_fileglob:
     - "{{ playbook_dir }}/user/blocks/dotfiles/.*"
