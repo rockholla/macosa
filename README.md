@@ -8,6 +8,7 @@
 2. Install your operating system, supported versions so far:
   * OSX 10.11 (El Capitan)
   * macOS 10.12 (Sierra)
+  * _Support for macOS 10.13 (High Sierra) coming soon!_
 3. See info on how to run the install script:
 ```
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -h
