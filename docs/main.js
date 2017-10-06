@@ -1,10 +1,10 @@
 var currentAudio;
 var currentStep;
 var presentationStarted = false;
+var controlsState = 'paused';
 
 document.addEventListener("DOMContentLoaded", function() {
 
-  var controlsState = 'paused';
   document.getElementById('play-pause-controls').addEventListener('click', function () {
     if (controlsState == 'playing') {
       this.style['background-position'] = '-183px 0px';
@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
         currentAudio.pause();
       }
     } else {
+      this.removeAttribute('class');
       this.style['background-position'] = '0px 0px';
       controlsState = 'playing';
       if (!presentationStarted) {
@@ -27,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function startPresentation() {
   presentationStarted = true;
-  document.getElementById('play-pause-controls').removeAttribute('class');
 
   var onStepEnter = function () {
     currentStep = document.querySelector( ".present" );
@@ -48,7 +48,12 @@ function startPresentation() {
 
     if (allAudio.length > 0) {
       currentAudio = allAudio[0];
-      currentAudio.play();
+      var played = currentAudio.play();
+      played.catch(function () {
+        document.getElementById('play-pause-controls').setAttribute('class', 'initial');
+        document.getElementById('play-pause-controls').style['background-position'] = '-183px 0px';
+        controlsState = 'paused';
+      });
     }
   }
 
