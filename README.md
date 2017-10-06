@@ -28,6 +28,6 @@ bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -
 
 ### Other Helpful Info
 
-macOSa is currently designed for new installs only. There might be a time where you could install it on an already-running and configured install of macOS.
+macOSa is currently designed for new installs only. There might come a time where you could install it on an already-running and configured install of macOS, but not yet.
 
 We welcome you to [submit issues](https://github.com/rockholla/macosa/issues) or [pull requests](https://github.com/rockholla/macosa/pulls). You can of course take what's available here and run with it on your own, but remember that submitting useful things back to the community is important and what this project is all about.
