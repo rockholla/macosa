@@ -517,7 +517,7 @@ a:focus {
 #play-pause-controls {
   opacity: 0.9;
   background-image: url(img/controls.png);
-  background-position: 0px 0px;
+  background-position: -183px 0px;
   cursor: pointer;
   background-repeat: no-repeat;
   width: 80px;
@@ -529,4 +529,20 @@ a:focus {
 }
 #play-pause-controls:hover {
   opacity: 1;
+}
+#play-pause-controls.initial {
+  animation: accentuate-play-pause-controls 5s infinite;
+  transform-origin: bottom right;
+}
+
+@keyframes accentuate-play-pause-controls {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
