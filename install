@@ -133,6 +133,8 @@ fi
 ./bin/macosa_softwareupdate "$install_source/install $rebootargs"
 # make sure xcode and/or xcode tools are installed
 ./bin/macosa_xcode $xcode
+# make sure homebrew is installed
+./bin/macosa_homebrew
 
 if [ ! -d ~/.macosa/user ]; then
   say "Time to initialize your area for customizing My Mac O S A"
