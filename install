@@ -131,8 +131,12 @@ fi
 
 # Let's run a system software update first before installing
 ./bin/macosa_softwareupdate "$install_source/install $rebootargs"
-# make sure xcode and/or xcode tools are installed
-./bin/macosa_xcode $xcode
+# we have to install tools first no matter what for compatibility purposes
+./bin/macosa_xcode "tools"
+# make sure full xcode tools are installed
+if [[ "$xcode" == "full" ]]; then
+  ./bin/macosa_xcode $xcode
+fi
 # make sure homebrew is installed
 ./bin/macosa_homebrew
 
