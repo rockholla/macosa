@@ -57,7 +57,7 @@ done
 if $remote; then
   cd ~/Downloads
   if [ ! -d macosa ] || [ $fresh == true ]; then
-    bash <(curl https://raw.githubusercontent.com/rockholla/macosa/$branch/bin/macosa_download) "install"
+    bash <(curl https://raw.githubusercontent.com/rockholla/macosa/$branch/bin/macosa_download) "install" "$branch"
   fi
   install_source="$(pwd)/macosa"
 else

@@ -2,11 +2,10 @@
 
 update=false
 
-branch="${1:-master}"
-
-if [ "$2" == "update" ]; then
+if [[ "$1" == "update" ]]; then
   update=true
 fi
+branch="${2:-master}"
 
 cd ~/Downloads
 printf "Downloading MacOSa source files...\n"
