@@ -135,7 +135,7 @@ fi
 ./bin/macosa_xcode "tools"
 # make sure full xcode tools are installed
 if [[ "$xcode" == "full" ]]; then
-  ./bin/macosa_xcode $xcode
+  ./bin/macosa_xcode "full"
 fi
 # make sure homebrew is installed
 ./bin/macosa_homebrew
