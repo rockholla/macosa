@@ -58,7 +58,7 @@ if $remote; then
   cd ~/Downloads
   if [ ! -d macosa ] || [ $fresh == true ]; then
     printf "Downloading source from macOSa branch $branch"
-    bash <(curl https://raw.githubusercontent.com/rockholla/macosa/$branch/bin/macosa_download) install $branch
+    bash <(curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/rockholla/macosa/$branch/bin/macosa_download) install $branch
   fi
   install_source="$(pwd)/macosa"
 else
