@@ -33,7 +33,11 @@ if (( $major_version < "$MINIMUM_MAJOR_VERSION" )); then
   printf "\033[31mError: only Xcode version $MINIMUM_MAJOR_VERSION and above can be downloaded using this utility\033[0m\n"
   exit 1
 fi
-if (( "$major_version" >= "8" )) && (( "$os_major_version" <= "10" )) && (( "$os_minor_version" <= "11" )); then
+if (( "$major_version" == "8" )) && (( "$minor_version" >= "3" )) && (( "$os_major_version" <= "10" )) && (( "$os_minor_version" <= "11" )); then
+  printf "\033[31mOSX/macOS < 10.12 is only compatible with Xcode version 8.2.1 and below\033[0m\n"
+  exit 1
+fi
+if (( "$major_version" > "8" )) && (( "$os_major_version" <= "10" )) && (( "$os_minor_version" <= "11" )); then
   printf "\033[31mOSX/macOS < 10.12 is only compatible with Xcode version 8.2.1 and below\033[0m\n"
   exit 1
 fi
