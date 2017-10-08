@@ -24,8 +24,17 @@ major_version="${version_parts[0]}"
 minor_version="${version_parts[1]:-0}"
 patch_version="${version_parts[2]:-0}"
 
+os_version=$(sw_vers | grep ^ProductVersion | awk '{print $2}')
+os_version_parts=(${os_version//./ })
+os_major_version="${version_parts[0]}"
+os_minor_version="${version_parts[1]}"
+
 if (( $major_version < "$MINIMUM_MAJOR_VERSION" )); then
   printf "\033[31mError: only Xcode version $MINIMUM_MAJOR_VERSION and above can be downloaded using this utility\033[0m\n"
+  exit 1
+fi
+if (( "$major_version" >= "8" )) && (( "$os_major_version" <= "10" )) && (( "$os_minor_version" <= "11" )); then
+  printf "\033[31mOSX/macOS < 10.12 is only compatible with Xcode version 8.2.1 and below\033[0m\n"
   exit 1
 fi
 if [[ $xcode_version == "8.3.3" || $xcode_version == "8.3.2" ]]; then
@@ -37,7 +46,6 @@ download_directory="Xcode_${xcode_version}"
 download_uri="https://developer.apple.com/services-account/download?path=/Developer_Tools/${download_directory}/${download_file_name}"
 
 initial_uri="https://developer.apple.com/download/"
-os_version=$(sw_vers | grep ^ProductVersion | awk '{print $2}')
 user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X ${os_version}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
 
 authenticate_uri="https://idmsa.apple.com/IDMSWebAuth/authenticate"

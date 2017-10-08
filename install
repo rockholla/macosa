@@ -138,14 +138,14 @@ fi
 
 # Let's run a system software update first before installing
 ./bin/macosa_softwareupdate "$install_source/install $rebootargs"
-# we have to install tools first no matter what for compatibility purposes
-./bin/macosa_xcode "tools"
-# make sure homebrew is installed
-./bin/macosa_homebrew
 # make sure full xcode tools are installed
 if [[ "$xcode" == "full" ]]; then
   ./bin/macosa_xcode "full"
 fi
+# Ensure that tools are installed as well, in certain cases we need to explicitly run 'xcode-select --install' even after installing full xcode
+./bin/macosa_xcode "tools"
+# make sure homebrew is installed
+./bin/macosa_homebrew
 
 if [ ! -d ~/.macosa/user ]; then
   say "Time to initialize your area for customizing My Mac O S A"
