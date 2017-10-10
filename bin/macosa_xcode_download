@@ -26,8 +26,8 @@ patch_version="${version_parts[2]:-0}"
 
 os_version=$(sw_vers | grep ^ProductVersion | awk '{print $2}')
 os_version_parts=(${os_version//./ })
-os_major_version="${version_parts[0]}"
-os_minor_version="${version_parts[1]}"
+os_major_version="${os_version_parts[0]}"
+os_minor_version="${os_version_parts[1]}"
 
 if (( $major_version < "$MINIMUM_MAJOR_VERSION" )); then
   printf "\033[31mError: only Xcode version $MINIMUM_MAJOR_VERSION and above can be downloaded using this utility\033[0m\n"
