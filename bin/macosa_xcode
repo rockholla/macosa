@@ -7,14 +7,31 @@ downloads_directory="$( cd "$this_dir/../.downloads" && pwd )"
 install_type="${1:-tools}"
 
 function xcode_tools() {
+  wait_type="$1"
   say "To continue, please click install in the following popup window"
   # Prompt user to install the XCode Command Line Tools
   xcode-select --install &>/dev/null
 
   # Wait until the XCode Command Line Tools are installed
-  until xcode-select --print-path &>/dev/null; do
-    sleep 5
-  done
+  if [[ "$wait_type" == "until_prompt" ]]; then
+    say "When the tools install process is finished, let us know"
+    done_installing_tools=false
+    until $done_installing_tools; do
+      read -rp $'\033[33mAre you finished with the Xcode tools install? [Y/n] \033[0m' response
+      case "$response" in
+        [yY][eE][sS]|[yY])
+          done_installing_tools=true
+          ;;
+        *)
+          done_installing_tools=false
+          ;;
+      esac
+    done
+  else
+    until xcode-select --print-path &>/dev/null; do
+      sleep 5
+    done
+  fi
 }
 
 if [[ $install_type == "tools" ]]; then
@@ -22,7 +39,7 @@ if [[ $install_type == "tools" ]]; then
   if ! xcode-select --print-path &>/dev/null; then
     printf "Installing Xcode tools...\n"
 
-    xcode_tools
+    xcode_tools "until_installed"
 
     printf "Xcode tools are finished installing.\n"
   else
@@ -88,7 +105,7 @@ elif [[ "$install_type" == "full" ]]; then
     echo $(cat ~/.macosa/.vaultpass) | sudo -S xcodebuild -license accept 2>/dev/null
 
     # this is to make sure we call xcode-select --install and initialize tools appropriately for compatibility purposes
-    xcode_tools
+    xcode_tools "until_prompt"
 
     printf "\033[32mXcode is finished installing.\033[0m\n"
   else
