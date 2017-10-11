@@ -117,6 +117,8 @@ elif [[ "$install_type" == "full" ]]; then
       printf "Accepting the Xcode license and opening it for the first time to initialize\n"
       echo $(cat ~/.macosa/.vaultpass) | sudo -S xcodebuild -license accept 2>/dev/null
       open /Applications/Xcode.app
+      say "Once Xcode has launched successfully, press any key to continue"
+      read -rsp $'Once Xcode has launched successfully, press any key to continue...\n' -n1 key
     fi
 
     printf "\033[32mXcode is finished installing.\033[0m\n"
