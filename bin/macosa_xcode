@@ -103,7 +103,7 @@ elif [[ "$install_type" == "full" ]]; then
     printf "Installing extracted Xcode.app to Applications...\n"
     echo $(cat ~/.macosa/.vaultpass) | sudo -S rsync -a /tmp/Xcode.app/ /Applications/Xcode.app &
     sleep 2
-    printf "The installation of all Xcode files might take a little while, don't mind what looks like a passord prompt above, it's not actually asking you for your password...\n"
+    printf " the installation of all Xcode files might take a little while...\n"
     wait
     rm "/tmp/$xcode_download_filename"
 
