@@ -14,7 +14,7 @@ Usage: `basename "$0"` [-h] [-u] [-l]
 
 Options:
   -h        Show this help
-  -u        Run a MacOS software update before provisioning
+  -u        Run a MacOS software update and macOSa update before provisioning
   -l        Logout when finished
   command:
     update  When this command is provided, MacOSa will be updated with the most recent 'master' version on github only
@@ -40,6 +40,7 @@ while [[ $# -gt 0 ]]; do
       ;;
     -u)
       update=true
+      update_macosa=true
       shift
       ;;
     -l)
@@ -52,6 +53,20 @@ while [[ $# -gt 0 ]]; do
       ;;
   esac
 done
+
+if [ -d .git ]; then
+  commit_hash=$(git rev-parse HEAD)
+  update_command="'git pull origin master' from ~/.macosa"
+else
+  commit_hash=$(curl -s https://api.github.com/repos/rockholla/macosa/branches/master | grep '"sha":' | head -1 | awk -F ':' '{print $2}' | awk -F '"' '{print $2}')
+  update_command="'macosa -u'"
+fi
+existing_version=$([ -f .version ] && cat .version)
+if [[ "$commit_hash" != "$existing_version" ]]; then
+  printf "\033[33mThere's an updated version of macOSa available, run $update_command to update\033[0m\n"
+fi
+
+exit
 
 if $update_macosa; then
   printf "Updating MacOSa...\n"

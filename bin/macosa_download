@@ -16,6 +16,8 @@ curl -L -o macosa.zip https://github.com/rockholla/macosa/zipball/$branch/
 unzip macosa.zip &>/dev/null
 mv rockholla-macosa* macosa
 rm -rf macosa/docs
+commit_hash=$(curl -s https://api.github.com/repos/rockholla/macosa/branches/$branch | grep '"sha":' | head -1 | awk -F ':' '{print $2}' | awk -F '"' '{print $2}')
+echo $commit_hash > macosa/.version
 rm macosa.zip
 if $update; then
   rsync -a --delete --exclude user --exclude .vaultpass --exclude .downloads ~/Downloads/macosa/ ~/.macosa/
