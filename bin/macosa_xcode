@@ -110,11 +110,8 @@ elif [[ "$install_type" == "full" ]]; then
     printf "Automatically accepting the Xcode license\n"
     echo $(cat ~/.macosa/.vaultpass) | sudo -S xcodebuild -license accept 2>/dev/null
 
-    # this is to make sure we call xcode-select --install and initialize tools appropriately for compatibility purposes
-    # I *think* it's only necessary for El Capitan right now
-    if (( "$os_major_version" <= "10" )) && (( "$os_minor_version" <= "11" )); then
-      xcode_tools "until_prompt"
-    fi
+    # even though we just installed the full Xcode app, it seems this tools install is necessary for cli tools compatibility
+    xcode_tools "until_prompt"
 
     printf "\033[32mXcode is finished installing.\033[0m\n"
   else
