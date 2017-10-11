@@ -66,8 +66,6 @@ if [[ "$commit_hash" != "$existing_version" ]]; then
   printf "\033[33mThere's an updated version of macOSa available, run $update_command to update\033[0m\n"
 fi
 
-exit
-
 if $update_macosa; then
   printf "Updating MacOSa...\n"
   ./bin/macosa_download "update"
