@@ -27,7 +27,9 @@
   changed_when: false
 
 - name: Install configured cask applications.
-  command: >
-    brew cask install {{ item }} --appdir={{ homebrew_cask_appdir }}
+  shell: >
+    echo $(cat {{ playbook_dir }}/.vaultpass) | sudo -S brew cask install {{ item }} --appdir={{ homebrew_cask_appdir }}
   with_items: "{{ homebrew_cask_apps }}"
   when: "item not in cask_installed_apps.stdout"
+  args:
+    warn: no
