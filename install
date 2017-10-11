@@ -103,6 +103,8 @@ fi
 
 cd ~/.macosa
 
+./bin/macosa_get_os_version
+
 # copy launchd on-reboot item into place
 if [ ! -f ~/Library/LaunchAgents/com.macosa.onboot.plist ]; then
   mkdir -p ~/Library/LaunchAgents

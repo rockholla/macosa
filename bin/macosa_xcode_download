@@ -3,6 +3,7 @@
 set -e
 
 MINIMUM_MAJOR_VERSION="8"
+
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 current_directory=$(pwd)
 
@@ -24,16 +25,11 @@ major_version="${version_parts[0]}"
 minor_version="${version_parts[1]:-0}"
 patch_version="${version_parts[2]:-0}"
 
-os_version=$(sw_vers | grep ^ProductVersion | awk '{print $2}')
-os_version_parts=(${os_version//./ })
-os_major_version="${os_version_parts[0]}"
-os_minor_version="${os_version_parts[1]}"
-
 if (( $major_version < "$MINIMUM_MAJOR_VERSION" )); then
   printf "\033[31mError: only Xcode version $MINIMUM_MAJOR_VERSION and above can be downloaded using this utility\033[0m\n"
   exit 1
 fi
-if (( "$major_version" == "8" )) && (( "$minor_version" >= "3" )) && (( "$os_major_version" <= "10" )) && (( "$os_minor_version" <= "11" )); then
+if (( "$major_version" == "8" )) && (( "$minor_version" >= "3" )) && (( "$OS_MAJOR_VERSION" <= "10" )) && (( "$OS_MINOR_VERSION" <= "11" )); then
   printf "\033[31mOSX/macOS < 10.12 is only compatible with Xcode version 8.2.1 and below\033[0m\n"
   exit 1
 fi
