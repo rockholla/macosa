@@ -11,6 +11,8 @@ os_version=$(get_os_version)
 os_major_version=$(get_version_part "$os_version" "major")
 os_minor_version=$(get_version_part "$os_version" "minor")
 
+xcode_version=""
+
 function xcode_tools() {
   wait_type="$1"
   say "To continue, please click install in the following popup window"
@@ -107,11 +109,15 @@ elif [[ "$install_type" == "full" ]]; then
     wait
     rm "/tmp/$xcode_download_filename"
 
-    printf "Automatically accepting the Xcode license\n"
-    echo $(cat ~/.macosa/.vaultpass) | sudo -S xcodebuild -license accept 2>/dev/null
-
-    # even though we just installed the full Xcode app, it seems this tools install is necessary for cli tools compatibility
-    xcode_tools "until_prompt"
+    xcode_major_version=$(get_version_part "$xcode_version" "major")
+    if (( "$xcode_major_version" >= 9 )); then
+      printf "Initializing Xcode and accepting the license\n"
+      echo $(cat ~/.macosa/.vaultpass) | sudo -S xcodebuild -runFirstLaunch 2>/dev/null
+    else
+      printf "Accepting the Xcode license and opening it for the first time to initialize\n"
+      echo $(cat ~/.macosa/.vaultpass) | sudo -S xcodebuild -license accept 2>/dev/null
+      open /Applications/Xcode.app
+    fi
 
     printf "\033[32mXcode is finished installing.\033[0m\n"
   else
