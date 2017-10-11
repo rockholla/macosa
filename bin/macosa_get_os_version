@@ -1,7 +1,0 @@
-#!/bin/bash
-
-os_version=$(sw_vers | grep ^ProductVersion | awk '{print $2}')
-os_version_parts=(${os_version//./ })
-export OS_MAJOR_VERSION="${os_version_parts[0]}"
-export OS_MINOR_VERSION="${os_version_parts[1]}"
-export OS_PATCH_VERSION="${os_version_parts[1]:-0}"

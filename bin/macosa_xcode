@@ -5,6 +5,11 @@
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 downloads_directory="$( cd "$this_dir/../.downloads" && pwd )"
 install_type="${1:-tools}"
+source "$this_dir/macosa_functions"
+
+os_version=$(get_os_version)
+os_major_version=$(get_version_part "$os_version" "major")
+os_minor_version=$(get_version_part "$os_version" "minor")
 
 function xcode_tools() {
   wait_type="$1"
@@ -106,7 +111,7 @@ elif [[ "$install_type" == "full" ]]; then
 
     # this is to make sure we call xcode-select --install and initialize tools appropriately for compatibility purposes
     # I *think* it's only necessary for El Capitan right now
-    if (( "$OS_MAJOR_VERSION" <= "10" )) && (( "$OS_MINOR_VERSION" <= "11" )); then
+    if (( "$os_major_version" <= "10" )) && (( "$os_minor_version" <= "11" )); then
       xcode_tools "until_prompt"
     fi
 
