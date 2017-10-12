@@ -21,10 +21,12 @@
   when: homebrew_upgrade
 
 - name: Get list of apps installed with cask.
-  command: >
-    brew cask list
+  shell: >
+    echo $(cat {{ playbook_dir }}/.vaultpass) | sudo -S brew cask list
   register: cask_installed_apps
   changed_when: false
+  args:
+    warn: no
 
 - name: Install configured cask applications.
   shell: >
