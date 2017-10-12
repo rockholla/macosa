@@ -141,7 +141,7 @@ fi
 # make sure either xcode tools or full xcode is installed
 ./bin/macosa_xcode "$xcode"
 # make sure homebrew is installed
-./bin/macosa_homebrew
+echo $(cat ~/.macosa/.vaultpass) | sudo -S ./bin/macosa_homebrew
 
 if [ ! -d ~/.macosa/user ]; then
   say "Time to initialize your area for customizing My Mac O S A"
