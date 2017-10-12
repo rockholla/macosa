@@ -153,7 +153,8 @@ fi
 
 # Run the playbook
 printf "Running main playbook against local connection...\n"
-ansible-playbook -i inventory/all $passthru macos.yml
+become_pass=$(cat .vaultpass)
+ansible-playbook -i inventory/all --extra-vars="ansible_become_pass=$become_pass" $passthru macos.yml
 
 if [ -f user/reminders/after ]; then
   printf "There are some reminders for you after this run:\n"
