@@ -1,8 +1,10 @@
 #!/bin/bash
 
+root_pass="$1"
+
 if ! command -v brew &>/dev/null; then
   printf "Installing Homebrew...\n"
-  yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  echo "$root_pass" | sudo -S /bin/bash -c 'yes "" | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'
 else
   printf "Homebrew is installed.\n"
 fi
