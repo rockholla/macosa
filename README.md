@@ -8,7 +8,9 @@
 2. Install your operating system, supported versions so far:
   * OSX 10.11 (El Capitan)
   * macOS 10.12 (Sierra)
-  * _Official support for macOS 10.13 (High Sierra) coming soon! It probably already works in most cases, but we just haven't tested it_
+  * macOS 10.13 (High Sierra)
+  * You can see more detailed info on compatibility in the [macOSa Testing Scenarios project](https://github.com/rockholla/macosa/projects/1)
+
 3. See info on how to run the install script:
 ```
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -h
@@ -31,4 +33,4 @@ bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -
 
 macOSa is currently designed for new installs only. There might come a time where you could install it on an already-running and configured install of macOS, but not yet.
 
-We welcome you to [submit issues](https://github.com/rockholla/macosa/issues) or [pull requests](https://github.com/rockholla/macosa/pulls). You can of course take what's available here and run with it on your own, but remember that submitting useful things back to the community is important and what this project is all about.
+Please [submit issues](https://github.com/rockholla/macosa/issues) or [pull requests](https://github.com/rockholla/macosa/pulls) if you find something that needs fixing or if you think something should be changed. You can of course take what's available here and run with it on your own, but remember that submitting useful things back to the community is important and what this project is all about.
