@@ -55,13 +55,15 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [ -d .git ]; then
-  commit_hash=$(git rev-parse HEAD)
+  git fetch
+  commit_hash=$(git rev-parse origin/master)
+  existing_version=$(git rev-parse HEAD)
   update_command="'git pull origin master' from ~/.macosa"
 else
   commit_hash=$(curl -s https://api.github.com/repos/rockholla/macosa/branches/master | grep '"sha":' | head -1 | awk -F ':' '{print $2}' | awk -F '"' '{print $2}')
+  existing_version=$([ -f .version ] && cat .version)
   update_command="'macosa -u'"
 fi
-existing_version=$([ -f .version ] && cat .version)
 if [[ "$commit_hash" != "$existing_version" ]]; then
   printf "\033[33mThere's an updated version of macOSa available, run $update_command to update\033[0m\n"
 fi
