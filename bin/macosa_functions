@@ -1,0 +1,17 @@
+#!/bin/bash
+
+function get_os_version() {
+  os_version=$(sw_vers | grep ^ProductVersion | awk '{print $2}')
+  echo $os_version
+}
+
+function get_version_part() {
+  version_parts=(${1//./ })
+  if [[ "$2" == "major" ]]; then
+    echo "${version_parts[0]:-0}"
+  elif [[ "$2" == "minor" ]]; then
+    echo "${version_parts[1]:-0}"
+  elif [[ "$2" == "patch" ]]; then
+    echo "${version_parts[2]:-0}"
+  fi
+}

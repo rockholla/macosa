@@ -3,8 +3,10 @@
 set -e
 
 MINIMUM_MAJOR_VERSION="8"
+
 this_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 current_directory=$(pwd)
+source "$this_dir/macosa_functions"
 
 mkdir -p "$this_dir/.tmp"
 
@@ -19,13 +21,24 @@ if [ -z "$apple_id" ] || [ -z "$apple_id_password" ] || [ -z "$xcode_version" ] 
   exit 1
 fi
 
-version_parts=(${xcode_version//./ })
-major_version="${version_parts[0]}"
-minor_version="${version_parts[1]:-0}"
-patch_version="${version_parts[2]:-0}"
+os_version=$(get_os_version)
+os_major_version=$(get_version_part "$os_version" "major")
+os_minor_version=$(get_version_part "$os_version" "minor")
+
+major_version=$(get_version_part "$xcode_version" "major")
+minor_version=$(get_version_part "$xcode_version" "minor")
+patch_version=$(get_version_part "$xcode_version" "patch")
 
 if (( $major_version < "$MINIMUM_MAJOR_VERSION" )); then
   printf "\033[31mError: only Xcode version $MINIMUM_MAJOR_VERSION and above can be downloaded using this utility\033[0m\n"
+  exit 1
+fi
+if (( "$major_version" == "8" )) && (( "$minor_version" >= "3" )) && (( "$os_major_version" <= "10" )) && (( "$os_minor_version" <= "11" )); then
+  printf "\033[31mOSX/macOS < 10.12 is only compatible with Xcode version 8.2.1 and below\033[0m\n"
+  exit 1
+fi
+if (( "$major_version" > "8" )) && (( "$os_major_version" <= "10" )) && (( "$os_minor_version" <= "11" )); then
+  printf "\033[31mOSX/macOS < 10.12 is only compatible with Xcode version 8.2.1 and below\033[0m\n"
   exit 1
 fi
 if [[ $xcode_version == "8.3.3" || $xcode_version == "8.3.2" ]]; then
@@ -37,7 +50,6 @@ download_directory="Xcode_${xcode_version}"
 download_uri="https://developer.apple.com/services-account/download?path=/Developer_Tools/${download_directory}/${download_file_name}"
 
 initial_uri="https://developer.apple.com/download/"
-os_version=$(sw_vers | grep ^ProductVersion | awk '{print $2}')
 user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X ${os_version}) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
 
 authenticate_uri="https://idmsa.apple.com/IDMSWebAuth/authenticate"

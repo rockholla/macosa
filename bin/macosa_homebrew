@@ -1,8 +1,12 @@
 #!/bin/bash
 
+root_pass="$1"
+echo "$root_pass" | sudo -S -v
+while true; do sleep 60; sudo -n true; kill -0 "$$" || exit; done 2>/dev/null &
+
 if ! command -v brew &>/dev/null; then
   printf "Installing Homebrew...\n"
-  yes '' | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  yes "" | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 else
   printf "Homebrew is installed.\n"
 fi

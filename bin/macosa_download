@@ -2,20 +2,23 @@
 
 update=false
 
-if [ "$1" == "update" ]; then
+if [[ "$1" == "update" ]]; then
   update=true
 fi
+branch="${2:-master}"
 
 cd ~/Downloads
 printf "Downloading MacOSa source files...\n"
 rm -rf ~/Downloads/macosa* &>/dev/null
 rm -rf ~/Downloads/rockholla* &>/dev/null
-rm -rf ~/Downloads/master.zip &>/dev/null
-curl -L -o master.zip https://github.com/rockholla/macosa/zipball/master/
-unzip master.zip &>/dev/null
+rm -rf ~/Downloads/macosa.zip &>/dev/null
+curl -L -o macosa.zip https://github.com/rockholla/macosa/zipball/$branch/
+unzip macosa.zip &>/dev/null
 mv rockholla-macosa* macosa
 rm -rf macosa/docs
-rm master.zip
+commit_hash=$(curl -s https://api.github.com/repos/rockholla/macosa/branches/$branch | grep '"sha":' | head -1 | awk -F ':' '{print $2}' | awk -F '"' '{print $2}')
+echo $commit_hash > macosa/.version
+rm macosa.zip
 if $update; then
   rsync -a --delete --exclude user --exclude .vaultpass --exclude .downloads ~/Downloads/macosa/ ~/.macosa/
   printf "MacOSa update complete\n"

@@ -2,6 +2,7 @@
 
 passthru=""
 xcode="tools"
+branch="master"
 remote=false
 root_pass=""
 root_pass_confirm=""
@@ -17,6 +18,7 @@ Options:
   -f                    Force a fresh install
   -r                    If present, this is a remote install and the repo should be downloaded locally first
   -h                    Show this help
+  -b                    Install from branch, useful for installing from testing branches other than master
   -x [tools|full]       "full" will attempt to install the full Xcode app/suite, you'll be able to input the version you want during the install process. If "tools" only XCode cli tools will be installed (default = "tools")
 
 EOF
@@ -37,6 +39,10 @@ while [[ $# -gt 0 ]]; do
       usage
       shift
       ;;
+    -b)
+      branch="$2"
+      shift 2
+      ;;
     -x)
       xcode="$2"
       shift 2
@@ -51,7 +57,8 @@ done
 if $remote; then
   cd ~/Downloads
   if [ ! -d macosa ] || [ $fresh == true ]; then
-    bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/bin/macosa_download) "install"
+    printf "Downloading source from macOSa branch $branch"
+    bash <(curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/rockholla/macosa/$branch/bin/macosa_download) install $branch
   fi
   install_source="$(pwd)/macosa"
 else
@@ -131,10 +138,10 @@ fi
 
 # Let's run a system software update first before installing
 ./bin/macosa_softwareupdate "$install_source/install $rebootargs"
-# make sure xcode and/or xcode tools are installed
-./bin/macosa_xcode $xcode
+# make sure either xcode tools or full xcode is installed
+./bin/macosa_xcode "$xcode"
 # make sure homebrew is installed
-./bin/macosa_homebrew
+./bin/macosa_homebrew "$root_pass"
 
 if [ ! -d ~/.macosa/user ]; then
   say "Time to initialize your area for customizing My Mac O S A"

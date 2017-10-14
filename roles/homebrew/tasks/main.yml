@@ -20,14 +20,23 @@
   homebrew: upgrade_all=yes
   when: homebrew_upgrade
 
+- name: "Refresh sudo cache"
+  command: "echo none"
+  become: yes
+  changed_when: false
+
 - name: Get list of apps installed with cask.
-  command: >
+  shell: >
     brew cask list
   register: cask_installed_apps
   changed_when: false
+  args:
+    warn: no
 
 - name: Install configured cask applications.
-  command: >
+  shell: >
     brew cask install {{ item }} --appdir={{ homebrew_cask_appdir }}
   with_items: "{{ homebrew_cask_apps }}"
   when: "item not in cask_installed_apps.stdout"
+  args:
+    warn: no

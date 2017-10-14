@@ -57,6 +57,7 @@
     content: "{{ ssh['config'] }}"
     dest: "/Users/{{ ansible_user_id }}/.ssh/config"
     mode: 0600
+  tags: [ ssh ]
 
 - name: Write ssh private key files
   copy:
@@ -64,6 +65,7 @@
     dest: "/Users/{{ ansible_user_id }}/.ssh/{{ item.name }}"
     mode: 0600
   with_items: "{{ ssh['keys'] }}"
+  tags: [ ssh ]
 
 - name: Write ssh public key files
   copy:
@@ -72,3 +74,4 @@
     mode: 0644
   when: item.public is defined
   with_items: "{{ ssh['keys'] }}"
+  tags: [ ssh ]
