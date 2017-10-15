@@ -156,7 +156,10 @@ fi
 # Run the playbook
 printf "Running main playbook against local connection...\n"
 become_pass=$(cat .vaultpass)
-ansible-playbook -i inventory/all --extra-vars="ansible_become_pass=$become_pass" $passthru macos.yml
+if ! ansible-playbook -i inventory/all --extra-vars="ansible_become_pass=$become_pass" $passthru macos.yml; then
+  printf "\033[31mmacOSa provisioning failed\033[0m\n"
+  exit 1
+fi
 
 if [ -f user/reminders/after ]; then
   printf "There are some reminders for you after this run:\n"
