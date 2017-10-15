@@ -41,6 +41,10 @@ if (( "$major_version" > "8" )) && (( "$os_major_version" <= "10" )) && (( "$os_
   printf "\033[31mOSX/macOS < 10.12 is only compatible with Xcode version 8.2.1 and below\033[0m\n"
   exit 1
 fi
+if (( "$major_version" < "9" )) && (( "$os_major_version" == "10" )) && (( "$os_minor_version" >= "13" )); then
+  printf "\033[31mOSX/macOS 10.13 and above requires Xcode version >= 9\033[0m\n"
+  exit 1
+fi
 if [[ $xcode_version == "8.3.3" || $xcode_version == "8.3.2" ]]; then
   download_file_name="Xcode${xcode_version}.xip"
 else
