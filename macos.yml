@@ -63,6 +63,7 @@
       with_items: "{{ user_post_tasks.files }}"
       loop_control:
         loop_var: "user_post_task_file"
+      tags: [ always ]
 
     - include_role:
         name: ruby
