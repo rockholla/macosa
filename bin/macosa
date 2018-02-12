@@ -153,10 +153,40 @@ if [ -f requirements.yml ]; then
   ansible-galaxy install -r requirements.yml
 fi
 
+# Gather any extra inventory from user-supplied files/config
+inventory_content="$(cat inventory/default)\n"
+inventory_path="inventory/default"
+for inventory_file in user/inventory/*; do
+  if [[ "$inventory_file" == "user/inventory/*" ]]; then
+    continue;
+  fi
+  printf "Adding custom inventory file content: $inventory_file\n"
+  inventory_content+="$(cat $inventory_file)\n"
+  inventory_path="inventory/.custom"
+done
+if [[ "$inventory_path" == "inventory/.custom" ]]; then
+  echo -e "$inventory_content" > inventory/.custom
+fi
+
+# If there are any user-defined playbooks, we need to make sure they get included
+master_playbook_content="$(cat macosa.yml)\n"
+master_playbook_path="macosa.yml"
+for user_defined_playbook in user/playbooks/*.yml; do
+  if [[ "$user_defined_playbook" == "user/playbooks/*.yml" ]]; then
+    continue;
+  fi
+  printf "Adding custom playbook to macosa run: $user_defined_playbook\n"
+  master_playbook_content+="- import_playbook: $user_defined_playbook\n"
+  master_playbook_path=".custom.yml"
+done
+if [[ "$master_playbook_path" == ".custom.yml" ]]; then
+  echo -e "$master_playbook_content" > .custom.yml
+fi
+
 # Run the playbook
 printf "Running main playbook against local connection...\n"
 become_pass=$(cat .vaultpass)
-if ! ansible-playbook -i inventory/all --extra-vars="ansible_become_pass=$become_pass" $passthru macos.yml; then
+if ! ansible-playbook -i $inventory_path --extra-vars="ansible_become_pass=$become_pass" $passthru $master_playbook_path; then
   printf "\033[31mmacOSa provisioning failed\033[0m\n"
   exit 1
 fi
@@ -173,5 +203,5 @@ if [ -f .logout ] || [ $logout == true ]; then
   ./bin/macosa_logout
   rm .logout
 else
-  printf "\n\033[33mNOTE: You may need to re-source your .bash_profile ( . ~/.bash_profile) or in certain cases close and reopen your terminal for changes to take effect\033[0m\n\n"
+  printf "\n\033[33mNOTE: You may need to re-source your profile (e.g.: . ~/.bash_profile) or in certain cases close and reopen your terminal for changes to take effect\033[0m\n\n"
 fi

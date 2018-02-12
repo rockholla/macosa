@@ -14,3 +14,5 @@ bin/onboot/*
 !bin/onboot/.keep
 bin/.tmp
 .version
+inventory/.custom
+.custom.yml
