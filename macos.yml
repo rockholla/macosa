@@ -23,12 +23,14 @@
         patterns: "*.yml"
       register: user_pre_tasks
       changed_when: false
+      tags: [ mymacosa ]
 
     - name: Include user-supplied pre tasks
       include_tasks: "{{ user_pre_task_file.path }}"
       with_items: "{{ user_pre_tasks.files }}"
       loop_control:
         loop_var: "user_pre_task_file"
+      tags: [ mymacosa ]
 
     - name: Ensure an initial .bash_profile is present
       lineinfile:
@@ -56,9 +58,11 @@
         patterns: "*.yml"
       register: user_post_tasks
       changed_when: false
+      tags: [ mymacosa ]
 
     - name: Include user-supplied post tasks
       include_tasks: "{{ user_post_task_file.path }}"
       with_items: "{{ user_post_tasks.files }}"
       loop_control:
         loop_var: "user_post_task_file"
+      tags: [ mymacosa ]
