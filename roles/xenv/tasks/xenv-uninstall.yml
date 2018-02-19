@@ -1,0 +1,28 @@
+---
+
+- name: See if {{ xenv_name }} is installed
+  shell: >
+    which {{ xenv_name }} | cat
+  register: xenv_command
+  changed_when: false
+
+- name: Execute initial uninstall command for {{ xenv_name }}
+  shell: >
+    rm -rf `{{ xenv_name }}`
+  when: xenv_command.stdout != ''
+  args:
+    warn: no
+
+- name: Ensure {{ xenv_name }} is not installed
+  homebrew:
+    name: "{{ xenv_name }}"
+    state: absent
+
+- name: Ensure {{ xenv_name }} .bash_profile block is not present
+  blockinfile:
+    marker: "# {mark} MacOSa managed block {{ xenv_name }}"
+    dest: "/Users/{{ ansible_user_id }}/.bash_profile"
+    create: yes
+    block: |
+      eval "$({{ xenv_name }} init -)"
+    state: absent

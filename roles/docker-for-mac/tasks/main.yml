@@ -1,0 +1,17 @@
+---
+
+- name: Check for existing Docker for Mac install
+  shell: >
+    brew cask list | grep ^docker$
+  register: docker_for_mac_install
+  changed_when: false
+  args:
+    warn: no
+
+- name: Install Docker for Mac
+  shell: >
+    brew cask install docker --appdir={{ homebrew_cask_appdir | default('/Applications') }}
+  when: "'docker' not in docker_for_mac_install.stdout"
+  notify: start docker
+  args:
+    warn: no

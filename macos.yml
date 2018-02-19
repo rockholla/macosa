@@ -1,5 +1,5 @@
 ---
-- name: The primary macOSa playbook
+- name: The Primary macOSa Playbook
   hosts: macos
   connection: local
   become: no
@@ -23,7 +23,6 @@
         patterns: "*.yml"
       register: user_pre_tasks
       changed_when: false
-      tags: [ always ]
 
     - name: Include user-supplied pre tasks
       include_tasks: "{{ user_pre_task_file.path }}"
@@ -37,13 +36,13 @@
         create: yes
         line: "# MacOSa manages a good deal of this file, you probably don't want to edit in here directly"
         insertbefore: BOF
+      tags: [ always ]
 
   roles:
 
     - { role: homebrew, when: "'homebrew' in include_macosa_roles", tags: [ homebrew ] }
-    - { role: python, when: "'python' in include_macosa_roles", tags: [ python ] }
-    - { role: node, when: "'node' in include_macosa_roles", tags: [ node ] }
-    - { role: ruby, when: "'ruby' in include_macosa_roles", tags: [ ruby ] }
+    - { role: xenv, when: "'xenv' in include_macosa_roles", tags: [ xenv ] }
+    - { role: docker-for-mac, when: "'docker-for-mac' in include_macosa_roles", tags: [ docker-for-mac, docker ] }
     - { role: browsers, when: "'browsers' in include_macosa_roles", tags: [ browsers ] }
     - { role: aws, when: "'aws' in include_macosa_roles", tags: [ aws ] }
     - { role: user, when: "'user' in include_macosa_roles", tags: [ user ] }
@@ -57,18 +56,9 @@
         patterns: "*.yml"
       register: user_post_tasks
       changed_when: false
-      tags: [ always ]
 
     - name: Include user-supplied post tasks
       include_tasks: "{{ user_post_task_file.path }}"
       with_items: "{{ user_post_tasks.files }}"
       loop_control:
         loop_var: "user_post_task_file"
-      tags: [ always ]
-
-    - include_role:
-        name: ruby
-      vars:
-        ruby_maintain_profile_sourcing: true
-      when: "'ruby' in include_macosa_roles"
-      tags: [ ruby ]

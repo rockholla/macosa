@@ -1,0 +1,25 @@
+---
+
+ruby_manage: yes
+ruby_default_version: stable
+ruby_versions:
+  - stable
+ruby_packages: []
+
+python_manage: yes
+python_default_version: stable
+python_versions:
+  - stable
+python_packages: []
+
+node_manage: yes
+node_default_version: stable
+node_versions:
+  - stable
+node_packages: []
+
+go_manage: yes
+go_default_version: stable
+go_versions:
+  - stable
+go_packages: []

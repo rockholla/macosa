@@ -4,9 +4,8 @@ ansible_python_interpreter: /usr/local/bin/python
 logout: no
 include_macosa_roles:
   - homebrew
-  - python
-  - ruby
-  - node
+  - xenv
+  - docker-for-mac
   - browsers
   - aws
   - user

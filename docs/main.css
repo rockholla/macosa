@@ -397,20 +397,39 @@ a:focus {
   left: 100px;
   transform-origin: 400px 370px;
 }
-.out-of-the-box.node img, .out-of-the-box.node.past img {
+.out-of-the-box.xenv img, .out-of-the-box.xenv.past img {
   top: -450px;
-  left: 400px;
+  left: 600px;
+  transform-origin: 200px 370px;
+}
+.out-of-the-box.node img, .out-of-the-box.node.past img {
+  top: -400px;
+  left: 600px;
   transform-origin: 200px 370px;
 }
 .out-of-the-box.python img, .out-of-the-box.python.past img {
   top: -300px;
-  left: 600px;
+  left: 300px;
   transform-origin: 100px 370px;
 }
-.out-of-the-box.rvm img, .out-of-the-box.rvm.past img {
-  top: -200px;
+.out-of-the-box.ruby img, .out-of-the-box.ruby.past img {
+  top: -250px;
   left: 900px;
+  width: 200px;
+  height: auto;
   transform-origin: -200px 220px;
+}
+.out-of-the-box.golang img, .out-of-the-box.golang.past img {
+  top: -190px;
+  left: 700px;
+  transform-origin: -200px 220px;
+}
+.out-of-the-box.docker img, .out-of-the-box.docker.past img {
+  top: -150px;
+  left: 300px;
+  width: 200px;
+  height: auto;
+  transform-origin: 300px 220px;
 }
 @keyframes out-of-box {
   0% {

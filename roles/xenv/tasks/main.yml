@@ -1,0 +1,79 @@
+---
+
+# Python
+- include_tasks: xenv-install.yml
+  when: python_manage
+  vars:
+    xenv_name: pyenv
+    xenv_language_name: Python
+    xenv_versions: "{{ python_versions }}"
+    xenv_default_version: "{{ python_default_version }}"
+    xenv_profile_block: ""
+    xenv_packages: "{{ python_packages }}"
+    xenv_package_check_command: "pip show"
+    xenv_package_install_command: "pip install"
+  tags: [ python ]
+- include_tasks: xenv-uninstall.yml
+  when: not python_manage
+  vars:
+    xenv_name: pyenv
+  tags: [ python ]
+
+# Ruby
+- include_tasks: xenv-install.yml
+  when: ruby_manage
+  vars:
+    xenv_name: rbenv
+    xenv_language_name: Ruby
+    xenv_versions: "{{ ruby_versions }}"
+    xenv_default_version: "{{ ruby_default_version }}"
+    xenv_profile_block: ""
+    xenv_packages: "{{ ruby_packages }}"
+    xenv_package_check_command: "gem list -i"
+    xenv_package_install_command: "gem install"
+  tags: [ ruby ]
+- include_tasks: xenv-uninstall.yml
+  when: not ruby_manage
+  vars:
+    xenv_name: rbenv
+  tags: [ ruby ]
+
+# Node
+- include_tasks: xenv-install.yml
+  when: node_manage
+  vars:
+    xenv_name: nodenv
+    xenv_language_name: Node
+    xenv_versions: "{{ node_versions }}"
+    xenv_default_version: "{{ node_default_version }}"
+    xenv_profile_block: ""
+    xenv_packages: "{{ node_packages }}"
+    xenv_package_check_command: "npm list -g"
+    xenv_package_install_command: "npm install -g"
+  tags: [ node ]
+- include_tasks: xenv-uninstall.yml
+  when: not node_manage
+  vars:
+    xenv_name: nodenv
+  tags: [ node ]
+
+# Go
+- include_tasks: xenv-install.yml
+  when: go_manage
+  vars:
+    xenv_name: goenv
+    xenv_language_name: Go
+    xenv_versions: "{{ go_versions }}"
+    xenv_default_version: "{{ go_default_version }}"
+    xenv_profile_block: |
+      export GOPATH="$HOME/.go"
+      export PATH="$GOPATH/bin:$PATH"
+    xenv_packages: "{{ go_packages }}"
+    xenv_package_check_command: "go list"
+    xenv_package_install_command: "go get"
+  tags: [ go ]
+- include_tasks: xenv-uninstall.yml
+  when: not go_manage
+  vars:
+    xenv_name: goenv
+  tags: [ go ]

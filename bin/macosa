@@ -90,7 +90,7 @@ if $update; then
   ./bin/macosa_softwareupdate
 fi
 
-# Install Python
+# Install baseline Python for running MacOSa
 
 if ! brew ls --versions python &>/dev/null; then
   printf "Installing Python via Homebrew...\n"

@@ -1,8 +1,0 @@
----
-
-nvm_install: yes
-nvm_version: "v0.33.2"
-node_versions:
-  - stable
-node_default_version: stable
-node_npm_global_packages: []
