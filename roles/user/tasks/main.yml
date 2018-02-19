@@ -2,7 +2,7 @@
 
 - name: Make sure .bash_profile is set up
   blockinfile:
-    marker: "# {mark} MacOSa managed block bash_profile_init"
+    marker: "# {mark} macOSa managed block bash_profile_init"
     dest: "/Users/{{ ansible_user_id }}/.bash_profile"
     create: yes
     block: |
@@ -20,11 +20,11 @@
 
 - name: Copy dotfile blocks to ~/
   blockinfile:
-    marker: "# {mark} MacOSa managed block user"
+    marker: "# {mark} macOSa managed block user"
     dest: "/Users/{{ ansible_user_id }}/{{ item.split('/')[-1] }}"
     create: yes
     block: "{{ lookup('file', item) }}"
-    insertafter: '# END MacOSa managed block bash_profile_init'
+    insertafter: '# END macOSa managed block bash_profile_init'
   when: "(item.split('/')[-1] != '.keep')"
   with_fileglob:
     - "{{ playbook_dir }}/user/blocks/dotfiles/.*"

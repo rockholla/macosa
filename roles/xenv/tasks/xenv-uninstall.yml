@@ -20,7 +20,7 @@
 
 - name: Ensure {{ xenv_name }} .bash_profile block is not present
   blockinfile:
-    marker: "# {mark} MacOSa managed block {{ xenv_name }}"
+    marker: "# {mark} macOSa managed block {{ xenv_name }}"
     dest: "/Users/{{ ansible_user_id }}/.bash_profile"
     create: yes
     block: |

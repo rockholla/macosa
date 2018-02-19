@@ -15,7 +15,7 @@
 ```
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -h
 ```
-4. Check out how to customize to fit your needs: https://github.com/rockholla/mymacosa. Fork that repo into your own, make all of the changes you like and push back up to your _public_ fork. MacOSa will ask you for this repo location at install time. If you'd like a jumpstart with how to write your customizations, feel free to check out the [customizations I built and use](https://github.com/rockholla/mymacosa-personal).
+4. Check out how to customize to fit your needs: https://github.com/rockholla/mymacosa. Fork that repo into your own, make all of the changes you like and push back up to your _public_ fork. macOSa will ask you for this repo location at install time. If you'd like a jumpstart with how to write your customizations, feel free to check out the [customizations I built and use](https://github.com/rockholla/mymacosa-personal).
 
 5. When you're ready to install, run the following:
 ```

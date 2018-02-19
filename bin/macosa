@@ -17,7 +17,7 @@ Options:
   -u        Run a MacOS software update and macOSa update before provisioning
   -l        Logout when finished
   command:
-    update  When this command is provided, MacOSa will be updated with the most recent 'master' version on github only
+    update  When this command is provided, macOSa will be updated with the most recent 'master' version on github only
 
 
 Other options:
@@ -69,7 +69,7 @@ if [[ "$commit_hash" != "$existing_version" ]]; then
 fi
 
 if $update_macosa; then
-  printf "Updating MacOSa...\n"
+  printf "Updating macOSa...\n"
   ./bin/macosa_download "update"
   exit 0
 fi
@@ -90,7 +90,7 @@ if $update; then
   ./bin/macosa_softwareupdate
 fi
 
-# Install baseline Python for running MacOSa
+# Install baseline Python for running macOSa
 
 if ! brew ls --versions python &>/dev/null; then
   printf "Installing Python via Homebrew...\n"

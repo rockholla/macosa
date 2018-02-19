@@ -36,7 +36,7 @@
       lineinfile:
         dest: "/Users/{{ ansible_user_id }}/.bash_profile"
         create: yes
-        line: "# MacOSa manages a good deal of this file, you probably don't want to edit in here directly"
+        line: "# macOSa manages a good deal of this file, you probably don't want to edit in here directly"
         insertbefore: BOF
       tags: [ always ]
 

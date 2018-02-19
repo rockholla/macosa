@@ -79,7 +79,7 @@ elif [[ "$install_type" == "full" ]]; then
                   continue=false
                   ;;
                 *)
-                  printf "\033[33mOK, moving on despite the failure. It shouldn't cause any issues for the rest of the MacOSa install process. You can download/install it yourself at any time by heading to the download center at https://developer.apple.com/download/more/\033[0m\n"
+                  printf "\033[33mOK, moving on despite the failure. It shouldn't cause any issues for the rest of the macOSa install process. You can download/install it yourself at any time by heading to the download center at https://developer.apple.com/download/more/\033[0m\n"
                   continue=true
               esac
             fi
@@ -87,7 +87,7 @@ elif [[ "$install_type" == "full" ]]; then
         )
         ;;
       *)
-        printf "\033[33mOK, not downloading/installling Xcode automatically. It shouldn't cause any issues for the rest of the MacOSa install process. You can download/install it yourself at any time by heading to the download center at https://developer.apple.com/download/more/\033[0m\n"
+        printf "\033[33mOK, not downloading/installling Xcode automatically. It shouldn't cause any issues for the rest of the macOSa install process. You can download/install it yourself at any time by heading to the download center at https://developer.apple.com/download/more/\033[0m\n"
         ;;
     esac
 
