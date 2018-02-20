@@ -14,7 +14,7 @@
     - name: Include user-supplied variables
       include_vars:
         dir: user/vars
-        ignore_files: [ ".keep", ".example" ]
+        ignore_files: [ ".keep", ".DS_Store" ]
       tags: [ always ]
 
     - name: Get a list of all user-supplied pre tasks to include
