@@ -54,9 +54,6 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# force disable gatekeeper early on
-sudo spctl --master-disable
-
 if $remote; then
   cd ~/Downloads
   if [ ! -d macosa ] || [ $fresh == true ]; then
@@ -138,6 +135,9 @@ if [ ! -f vars/internal.yml ]; then
   # Save the path to this install directory so we can auto-sync changes from the install location back to here
   echo "macosa_install_source: \"$install_source\"" >> vars/internal.yml
 fi
+
+# force disable gatekeeper
+echo $(cat ~/.macosa/.vaultpass) | sudo spctl --master-disable
 
 # Let's run a system software update first before installing
 ./bin/macosa_softwareupdate "$install_source/install $rebootargs"
