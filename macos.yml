@@ -32,12 +32,18 @@
         loop_var: "user_pre_task_file"
       tags: [ mymacosa ]
 
-    - name: Ensure an initial .bash_profile is present
-      lineinfile:
+    - name: See if user .bash_profile exists
+      stat:
+        path: "/Users/{{ ansible_user_id }}/.bash_profile"
+      register: user_bash_profile
+      changed_when: false
+      tags: [ always ]
+
+    - name: Ensure initial .bash_profile is present
+      copy:
         dest: "/Users/{{ ansible_user_id }}/.bash_profile"
-        create: yes
-        line: "# macOSa manages a good deal of this file, you probably don't want to edit in here directly"
-        insertbefore: BOF
+        content: "# macOSa manages a good deal of this file, you probably don't want to edit in here directly"
+      when: not user_bash_profile.stat.exists
       tags: [ always ]
 
   roles:
