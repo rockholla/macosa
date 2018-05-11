@@ -54,6 +54,9 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# force disable gatekeeper early on
+sudo spctl --master-disable
+
 if $remote; then
   cd ~/Downloads
   if [ ! -d macosa ] || [ $fresh == true ]; then
