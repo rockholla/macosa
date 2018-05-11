@@ -61,11 +61,14 @@
   with_items: "{{ etc_hosts }}"
 
 - name: Set system and application defaults
-  plist:
-    dest: "{{ item.domain }}"
-    values: "{{ item['values'] }}"
-    container: "{{ item.container | default(None) }}"
-  with_items: "{{ system_defaults }}"
+  osx_defaults:
+    domain: "{{ item.0.domain }}"
+    key: "{{ item.1.key }}"
+    type: "{{ item.1.type }}"
+    value: "{{ item.1.value }}"
+  with_subelements: 
+    - "{{ system_defaults }}"
+    - values
   notify:
     - logout
 
