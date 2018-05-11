@@ -2,7 +2,7 @@
 
 - name: Check for existing Docker for Mac install
   shell: >
-    brew cask list | grep ^docker$
+    brew cask list | grep ^docker$ | cat
   register: docker_for_mac_install
   changed_when: false
   args:
