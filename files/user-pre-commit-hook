@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "Executing pre-commit hook"
+for f in $(git diff --cached --name-only && git diff --name-only | grep vault.yml &> /dev/null); do
+  if ! cat $f | grep '^\$ANSIBLE_VAULT' &>/dev/null; then
+    echo "ERROR: Unencrypted vault.yml file found: $f"
+    echo "       Not going ahead with the commit"
+    exit 1
+  fi
+done

@@ -159,6 +159,9 @@ if [ ! -d ~/.macosa/user ]; then
     cd ~/.macosa/user
     git checkout $mymacosa_repo_version
     cd ~/.macosa
+    # add user pre-commit hook
+    cp ~/.macosa/files/user-pre-commit-hook ~/.macosa/user/.git/hooks/pre-commit
+    chmod +x ~/.macosa/user/.git/hooks/pre-commit
   else
     cd ~/Downloads
     curl -L -o master.zip https://github.com/rockholla/mymacosa/zipball/master/
