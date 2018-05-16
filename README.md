@@ -27,7 +27,7 @@ or if you'd like to install the full Xcode app/suite (not just tools):
 bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -r -x full
 ```
 
-6. Follow the prompts and enjoy!
+6. Follow the prompts, you'll be up-and-running pretty quickly and easily
 
 ### Other Helpful Info
 
