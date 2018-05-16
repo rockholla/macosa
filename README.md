@@ -1,4 +1,4 @@
-![macOSa](https://s3-us-west-2.amazonaws.com/org.rockholla.macosa/macosa.png)
+![macOSa](docs/img/macosa.png)
 
 ## Get up and running quickly with a new macOS install the way you want it.  And keep it that way.
 
