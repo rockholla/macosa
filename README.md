@@ -31,6 +31,8 @@ bash <(curl https://raw.githubusercontent.com/rockholla/macosa/master/install) -
 
 ### Other Helpful Info
 
+macOSa is focused on making things easy and quick. To this end, it attempts to minimize the amount of times you have to input your account/machine password. We believe it's important to make you aware that, after you provide it on initial install, it writes this password in plain text to your machine under `~/.macosa/vars/internal.yml` as well as `~/.macosa/.vaultpass`. It's a bit like a key inside the thing that it opens, so we feel it's a reasonable practice as long as you're following other standard practices to secure your machine and account. We know this might not be acceptable for everyone though, so we just want to make you aware.
+
 macOSa is currently designed for new installs only. There might come a time where you could install it on an already-running and configured install of macOS, but not yet.
 
 Please [submit issues](https://github.com/rockholla/macosa/issues) or [pull requests](https://github.com/rockholla/macosa/pulls) if you find something that needs fixing or if you think something should be changed. You can of course take what's available here and run with it on your own, but remember that submitting useful things back to the community is important and what this project is all about.
