@@ -7,7 +7,7 @@
 
 - name: Get latest version of {{ xenv_language_name }}
   shell: >
-    {{ xenv_name }} install --list | awk '{print $1}' | grep '^\d\.\d\.\d$' | tail -1
+    {{ xenv_name }} install --list | awk '{print $1}' | grep '^(\d+)\.(\d+)\.(\d+)$' | tail -1
   register: xenv_latest_version
   changed_when: false
 
