@@ -5,21 +5,21 @@
     name: "{{ xenv_name }}"
     state: present
 
-- name: Get stable version of {{ xenv_language_name }}
+- name: Get latest version of {{ xenv_language_name }}
   shell: >
     {{ xenv_name }} install --list | awk '{print $1}' | grep '^\d\.\d\.\d$' | tail -1
-  register: xenv_stable_version
+  register: xenv_latest_version
   changed_when: false
 
 - name: Install {{ xenv_language_name }} versions
   shell: >
-    {{ xenv_name }} install -s {{ xenv_stable_version.stdout|trim if item == 'stable' else item }}
+    {{ xenv_name }} install -s {{ xenv_latest_version.stdout|trim if item == 'latest' else item }}
   register: xenv_version_install
   changed_when: "'Installed' in xenv_version_install"
   with_items: "{{ xenv_versions }}"
 
 - set_fact:
-    _xenv_default_version: "{{ xenv_stable_version.stdout|trim if xenv_default_version == 'stable' else xenv_default_version }}"
+    _xenv_default_version: "{{ xenv_latest_version.stdout|trim if xenv_default_version == 'latest' else xenv_default_version }}"
 
 - name: Get the current global {{ xenv_language_name }} version
   command: >
@@ -45,7 +45,7 @@
 - name: Install {{ xenv_language_name }} packages for each installed version
   shell: >
     if ! {{ xenv_package_check_command }} {{ item[1] }}; then
-      eval "$({{ xenv_name }} init -)" && {{ xenv_name }} shell {{ xenv_stable_version.stdout|trim if item[0] == 'stable' else item[0] }} && {{ xenv_package_install_command }} {{ item[1] }}
+      eval "$({{ xenv_name }} init -)" && {{ xenv_name }} shell {{ xenv_latest_version.stdout|trim if item[0] == 'latest' else item[0] }} && {{ xenv_package_install_command }} {{ item[1] }}
       echo "package installed"
     fi
   register: xenv_package_install
